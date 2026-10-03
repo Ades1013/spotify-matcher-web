@@ -1,0 +1,200 @@
+2026-09-30T04:06:18.416232803Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /channel_picker\n'
+2026-09-30T04:06:18.416235914Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /comment\n'
+2026-09-30T04:06:18.416238684Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /feeds/videos.xml\n'
+2026-09-30T04:06:18.416241714Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /file_download\n'
+2026-09-30T04:06:18.416244474Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_video\n'
+2026-09-30T04:06:18.416247194Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_video_info\n'
+2026-09-30T04:06:18.416250235Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_midroll_info\n'
+2026-09-30T04:06:18.416253195Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /live_chat\n'
+2026-09-30T04:06:18.416256215Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /login\n'
+2026-09-30T04:06:18.416259095Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /qr\n'
+2026-09-30T04:06:18.416261915Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /results\n'
+2026-09-30T04:06:18.416264556Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /signup\n'
+2026-09-30T04:06:18.416267496Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /t/terms\n'
+2026-09-30T04:06:18.416270296Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /timedtext_video\n'
+2026-09-30T04:06:18.416273086Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /verify_age\n'
+2026-09-30T04:06:18.416276066Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_ajax\n'
+2026-09-30T04:06:18.416296158Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_fragments_ajax\n'
+2026-09-30T04:06:18.416302848Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_popup\n'
+2026-09-30T04:06:18.416306008Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_queue_ajax\n'
+2026-09-30T04:06:18.416322529Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /youtubei/\n'
+2026-09-30T04:06:18.41632763Z WARNING: skipping cookie file entry due to invalid length 1: 'Sitemap: https://www.youtube.com/sitemaps/sitemap.xml\n'
+2026-09-30T04:06:18.41633044Z WARNING: skipping cookie file entry due to invalid length 1: 'Sitemap: https://www.youtube.com/product/sitemap.xml\n'
+2026-09-30T04:06:20.362578827Z ERROR: [youtube] OCigfUcedFg: Please sign in. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:20.612030576Z WARNING: skipping cookie file entry due to invalid length 1: 'User-agent: Mediapartners-Google*\n'
+2026-09-30T04:06:20.612051418Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow:\n'
+2026-09-30T04:06:20.612055628Z WARNING: skipping cookie file entry due to invalid length 1: 'User-agent: *\n'
+2026-09-30T04:06:20.612058618Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /api/\n'
+2026-09-30T04:06:20.612065169Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /channel_picker\n'
+2026-09-30T04:06:20.612069449Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /comment\n'
+2026-09-30T04:06:20.612073919Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /feeds/videos.xml\n'
+2026-09-30T04:06:20.61207781Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /file_download\n'
+2026-09-30T04:06:20.61208217Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_video\n'
+2026-09-30T04:06:20.61208521Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_video_info\n'
+2026-09-30T04:06:20.61208781Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_midroll_info\n'
+2026-09-30T04:06:20.61209029Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /live_chat\n'
+2026-09-30T04:06:20.612104911Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /login\n'
+2026-09-30T04:06:20.612115982Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /qr\n'
+2026-09-30T04:06:20.612120282Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /results\n'
+2026-09-30T04:06:20.612123793Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /signup\n'
+2026-09-30T04:06:20.612127673Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /t/terms\n'
+2026-09-30T04:06:20.612131313Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /timedtext_video\n'
+2026-09-30T04:06:20.612143514Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /verify_age\n'
+2026-09-30T04:06:20.612147274Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_ajax\n'
+2026-09-30T04:06:20.612150314Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_fragments_ajax\n'
+2026-09-30T04:06:20.612153574Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_popup\n'
+2026-09-30T04:06:20.612157045Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_queue_ajax\n'
+2026-09-30T04:06:20.612166825Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /youtubei/\n'
+2026-09-30T04:06:20.612170505Z WARNING: skipping cookie file entry due to invalid length 1: 'Sitemap: https://www.youtube.com/sitemaps/sitemap.xml\n'
+2026-09-30T04:06:20.612173736Z WARNING: skipping cookie file entry due to invalid length 1: 'Sitemap: https://www.youtube.com/product/sitemap.xml\n'
+2026-09-30T04:06:22.802888808Z ERROR: [youtube] OCigfUcedFg: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:24.768571351Z ERROR: [youtube] OCigfUcedFg: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:24.769839364Z    ⚠️ Intento 3 (['ios', 'android_vr']) rechazado: ERROR: [youtube] U5HAEzEk8QM: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:24.769854885Z    ⚠️ Opción #2 bloqueada, probando siguiente versión oficial...
+2026-09-30T04:06:24.769857955Z ⬇️ Descargando #3: Du hast (Rammstein Official | 14.2M vistas)...
+2026-09-30T04:06:24.769860465Z 🍪 Cookies activas desde /etc/secrets/cookies.txt (26 entradas)
+2026-09-30T04:06:24.769863095Z    ⚠️ Intento 1 (['web_creator', 'tv_embedded', 'mweb']) rechazado: ERROR: [youtube] KRRoQkkwuJE: Please sign in. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:24.769865565Z 🍪 Cookies activas desde /etc/secrets/cookies.txt (26 entradas)
+2026-09-30T04:06:24.769868156Z    ⚠️ Intento 2 (['web', 'mweb']) rechazado: ERROR: [youtube] KRRoQkkwuJE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:24.769870796Z    ⚠️ Intento 3 (['ios', 'android_vr']) rechazado: ERROR: [youtube] KRRoQkkwuJE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:24.769873186Z    ⚠️ Opción #3 bloqueada, probando siguiente versión oficial...
+2026-09-30T04:06:24.769876806Z 🔍 Buscando en Canal Oficial del Artista (+vistas): This Is Halloween - Marilyn Manson...
+2026-09-30T04:06:24.769881406Z 🍪 Cookies activas desde /etc/secrets/cookies.txt (26 entradas)
+2026-09-30T04:06:24.769884067Z ⬇️ Descargando #1: This Is Halloween (Marilyn Manson | 12.7M vistas)...
+2026-09-30T04:06:24.769886777Z 🍪 Cookies activas desde /etc/secrets/cookies.txt (26 entradas)
+2026-09-30T04:06:24.769889297Z    ⚠️ Intento 1 (['web_creator', 'tv_embedded', 'mweb']) rechazado: ERROR: [youtube] VpS5vMlmqK4: Please sign in. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:24.769899558Z 🍪 Cookies activas desde /etc/secrets/cookies.txt (26 entradas)
+2026-09-30T04:06:24.769902578Z    ⚠️ Intento 2 (['web', 'mweb']) rechazado: ERROR: [youtube] VpS5vMlmqK4: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:24.769905108Z    ⚠️ Intento 3 (['ios', 'android_vr']) rechazado: ERROR: [youtube] VpS5vMlmqK4: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:24.769907708Z    ⚠️ Opción #1 bloqueada, probando siguiente versión oficial...
+2026-09-30T04:06:24.769910528Z ⬇️ Descargando #2: This Is Halloween (Marilyn Manson | 7.0M vistas)...
+2026-09-30T04:06:24.769913008Z 🍪 Cookies activas desde /etc/secrets/cookies.txt (26 entradas)
+2026-09-30T04:06:24.769918099Z    ⚠️ Intento 1 (['web_creator', 'tv_embedded', 'mweb']) rechazado: ERROR: [youtube] SPqa2faffgU: Please sign in. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:24.769920769Z 🍪 Cookies activas desde /etc/secrets/cookies.txt (26 entradas)
+2026-09-30T04:06:24.769923339Z    ⚠️ Intento 2 (['web', 'mweb']) rechazado: ERROR: [youtube] SPqa2faffgU: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:24.769925849Z    ⚠️ Intento 3 (['ios', 'android_vr']) rechazado: ERROR: [youtube] SPqa2faffgU: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:24.76992852Z    ⚠️ Opción #2 bloqueada, probando siguiente versión oficial...
+2026-09-30T04:06:24.76993104Z ⬇️ Descargando #3: Marilyn Manson - This is Halloween (lizzyhayes2011 | 135.6K vistas)...
+2026-09-30T04:06:24.76993351Z 🍪 Cookies activas desde /etc/secrets/cookies.txt (26 entradas)
+2026-09-30T04:06:24.76993607Z    ⚠️ Intento 1 (['web_creator', 'tv_embedded', 'mweb']) rechazado: ERROR: [youtube] wdtWzSDWTAE: Please sign in. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:24.76993857Z 🍪 Cookies activas desde /etc/secrets/cookies.txt (26 entradas)
+2026-09-30T04:06:24.769945061Z    ⚠️ Intento 2 (['web', 'mweb']) rechazado: ERROR: [youtube] wdtWzSDWTAE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:24.769947941Z    ⚠️ Intento 3 (['ios', 'android_vr']) rechazado: ERROR: [youtube] wdtWzSDWTAE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:24.769950441Z    ⚠️ Opción #3 bloqueada, probando siguiente versión oficial...
+2026-09-30T04:06:24.769953261Z 🔍 Buscando en Canal Oficial del Artista (+vistas): The Haunting (Somewhere in Time)...
+2026-09-30T04:06:24.769955781Z 🍪 Cookies activas desde /etc/secrets/cookies.txt (26 entradas)
+2026-09-30T04:06:24.769958942Z ⬇️ Descargando #1: The Haunting (Somewhere in Time) (Radio Edit) (feat. Simone Simons) (KAMELOT | 89.2K vistas)...
+2026-09-30T04:06:24.769961512Z 🍪 Cookies activas desde /etc/secrets/cookies.txt (26 entradas)
+2026-09-30T04:06:24.769963962Z    ⚠️ Intento 1 (['web_creator', 'tv_embedded', 'mweb']) rechazado: ERROR: [youtube] OCigfUcedFg: Please sign in. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:24.769966432Z 🍪 Cookies activas desde /etc/secrets/cookies.txt (26 entradas)
+2026-09-30T04:06:24.769975203Z    ⚠️ Intento 2 (['web', 'mweb']) rechazado: ERROR: [youtube] OCigfUcedFg: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:25.015894711Z WARNING: skipping cookie file entry due to invalid length 1: 'User-agent: Mediapartners-Google*\n'
+2026-09-30T04:06:25.015918772Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow:\n'
+2026-09-30T04:06:25.015922043Z WARNING: skipping cookie file entry due to invalid length 1: 'User-agent: *\n'
+2026-09-30T04:06:25.015925573Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /api/\n'
+2026-09-30T04:06:25.015929193Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /channel_picker\n'
+2026-09-30T04:06:25.015932284Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /comment\n'
+2026-09-30T04:06:25.015935464Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /feeds/videos.xml\n'
+2026-09-30T04:06:25.015938164Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /file_download\n'
+2026-09-30T04:06:25.015940984Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_video\n'
+2026-09-30T04:06:25.015943804Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_video_info\n'
+2026-09-30T04:06:25.015946554Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_midroll_info\n'
+2026-09-30T04:06:25.015949394Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /live_chat\n'
+2026-09-30T04:06:25.015982137Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /login\n'
+2026-09-30T04:06:25.015984777Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /qr\n'
+2026-09-30T04:06:25.015986757Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /results\n'
+2026-09-30T04:06:25.015989157Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /signup\n'
+2026-09-30T04:06:25.015991027Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /t/terms\n'
+2026-09-30T04:06:25.015992857Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /timedtext_video\n'
+2026-09-30T04:06:25.015994648Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /verify_age\n'
+2026-09-30T04:06:25.015996488Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_ajax\n'
+2026-09-30T04:06:25.015998418Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_fragments_ajax\n'
+2026-09-30T04:06:25.016006988Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_popup\n'
+2026-09-30T04:06:25.016008908Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_queue_ajax\n'
+2026-09-30T04:06:25.016010769Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /youtubei/\n'
+2026-09-30T04:06:25.016013169Z WARNING: skipping cookie file entry due to invalid length 1: 'Sitemap: https://www.youtube.com/sitemaps/sitemap.xml\n'
+2026-09-30T04:06:25.016015109Z WARNING: skipping cookie file entry due to invalid length 1: 'Sitemap: https://www.youtube.com/product/sitemap.xml\n'
+2026-09-30T04:06:26.869966649Z ERROR: [youtube] Y4mpaREfqQ4: Please sign in. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:27.224814324Z WARNING: skipping cookie file entry due to invalid length 1: 'User-agent: Mediapartners-Google*\n'
+2026-09-30T04:06:27.224836725Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow:\n'
+2026-09-30T04:06:27.224840145Z WARNING: skipping cookie file entry due to invalid length 1: 'User-agent: *\n'
+2026-09-30T04:06:27.224843215Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /api/\n'
+2026-09-30T04:06:27.224847116Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /channel_picker\n'
+2026-09-30T04:06:27.224850036Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /comment\n'
+2026-09-30T04:06:27.224852926Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /feeds/videos.xml\n'
+2026-09-30T04:06:27.224855806Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /file_download\n'
+2026-09-30T04:06:27.224858707Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_video\n'
+2026-09-30T04:06:27.224861437Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_video_info\n'
+2026-09-30T04:06:27.224864027Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_midroll_info\n'
+2026-09-30T04:06:27.224866747Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /live_chat\n'
+2026-09-30T04:06:27.224869807Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /login\n'
+2026-09-30T04:06:27.224880218Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /qr\n'
+2026-09-30T04:06:27.224882418Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /results\n'
+2026-09-30T04:06:27.224900839Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /signup\n'
+2026-09-30T04:06:27.22490441Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /t/terms\n'
+2026-09-30T04:06:27.22490773Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /timedtext_video\n'
+2026-09-30T04:06:27.22491036Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /verify_age\n'
+2026-09-30T04:06:27.22491299Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_ajax\n'
+2026-09-30T04:06:27.22491569Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_fragments_ajax\n'
+2026-09-30T04:06:27.22491848Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_popup\n'
+2026-09-30T04:06:27.224921391Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_queue_ajax\n'
+2026-09-30T04:06:27.224924281Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /youtubei/\n'
+2026-09-30T04:06:27.224926951Z WARNING: skipping cookie file entry due to invalid length 1: 'Sitemap: https://www.youtube.com/sitemaps/sitemap.xml\n'
+2026-09-30T04:06:27.224928901Z WARNING: skipping cookie file entry due to invalid length 1: 'Sitemap: https://www.youtube.com/product/sitemap.xml\n'
+2026-09-30T04:06:29.303824835Z ERROR: [youtube] Y4mpaREfqQ4: Sign in to confirm your age. This video may be inappropriate for some users. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:31.336185091Z ERROR: [youtube] Y4mpaREfqQ4: This video may be inappropriate for some users.
+2026-09-30T04:06:31.524681894Z WARNING: skipping cookie file entry due to invalid length 1: 'User-agent: Mediapartners-Google*\n'
+2026-09-30T04:06:31.524706556Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow:\n'
+2026-09-30T04:06:31.524710246Z WARNING: skipping cookie file entry due to invalid length 1: 'User-agent: *\n'
+2026-09-30T04:06:31.524713666Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /api/\n'
+2026-09-30T04:06:31.524718077Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /channel_picker\n'
+2026-09-30T04:06:31.524720957Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /comment\n'
+2026-09-30T04:06:31.524723787Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /feeds/videos.xml\n'
+2026-09-30T04:06:31.524726657Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /file_download\n'
+2026-09-30T04:06:31.524749449Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_video\n'
+2026-09-30T04:06:31.524755859Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_video_info\n'
+2026-09-30T04:06:31.524758829Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_midroll_info\n'
+2026-09-30T04:06:31.524761809Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /live_chat\n'
+2026-09-30T04:06:31.5247678Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /login\n'
+2026-09-30T04:06:31.52477093Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /qr\n'
+2026-09-30T04:06:31.52477388Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /results\n'
+2026-09-30T04:06:31.52477685Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /signup\n'
+2026-09-30T04:06:31.524796752Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /t/terms\n'
+2026-09-30T04:06:31.524799802Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /timedtext_video\n'
+2026-09-30T04:06:31.524802722Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /verify_age\n'
+2026-09-30T04:06:31.524820623Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_ajax\n'
+2026-09-30T04:06:31.524824124Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_fragments_ajax\n'
+2026-09-30T04:06:31.524826874Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_popup\n'
+2026-09-30T04:06:31.524829554Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_queue_ajax\n'
+2026-09-30T04:06:31.524832494Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /youtubei/\n'
+2026-09-30T04:06:31.524835924Z WARNING: skipping cookie file entry due to invalid length 1: 'Sitemap: https://www.youtube.com/sitemaps/sitemap.xml\n'
+2026-09-30T04:06:31.524838514Z WARNING: skipping cookie file entry due to invalid length 1: 'Sitemap: https://www.youtube.com/product/sitemap.xml\n'
+2026-09-30T04:06:33.799957304Z ERROR: [youtube] wHSRwokbsZE: Please sign in. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:34.112380519Z WARNING: skipping cookie file entry due to invalid length 1: 'User-agent: Mediapartners-Google*\n'
+2026-09-30T04:06:34.11240047Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow:\n'
+2026-09-30T04:06:34.1124038Z WARNING: skipping cookie file entry due to invalid length 1: 'User-agent: *\n'
+2026-09-30T04:06:34.11240633Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /api/\n'
+2026-09-30T04:06:34.112410611Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /channel_picker\n'
+2026-09-30T04:06:34.112414471Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /comment\n'
+2026-09-30T04:06:34.112418971Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /feeds/videos.xml\n'
+2026-09-30T04:06:34.112422991Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /file_download\n'
+2026-09-30T04:06:34.112427002Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_video\n'
+2026-09-30T04:06:34.112430812Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_video_info\n'
+2026-09-30T04:06:34.112448873Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /get_midroll_info\n'
+2026-09-30T04:06:34.112453413Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /live_chat\n'
+2026-09-30T04:06:34.112455824Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /login\n'
+2026-09-30T04:06:34.112458204Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /qr\n'
+2026-09-30T04:06:34.112460474Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /results\n'
+2026-09-30T04:06:34.112462734Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /signup\n'
+2026-09-30T04:06:34.112465024Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /t/terms\n'
+2026-09-30T04:06:34.112467444Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /timedtext_video\n'
+2026-09-30T04:06:34.112469794Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /verify_age\n'
+2026-09-30T04:06:34.112493486Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_ajax\n'
+2026-09-30T04:06:34.112497026Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_fragments_ajax\n'
+2026-09-30T04:06:34.112499347Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_popup\n'
+2026-09-30T04:06:34.112501656Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /watch_queue_ajax\n'
+2026-09-30T04:06:34.112503977Z WARNING: skipping cookie file entry due to invalid length 1: 'Disallow: /youtubei/\n'
+2026-09-30T04:06:34.112507937Z WARNING: skipping cookie file entry due to invalid length 1: 'Sitemap: https://www.youtube.com/sitemaps/sitemap.xml\n'
+2026-09-30T04:06:34.112510297Z WARNING: skipping cookie file entry due to invalid length 1: 'Sitemap: https://www.youtube.com/product/sitemap.xml\n'
+2026-09-30T04:06:36.351945735Z ERROR: [youtube] wHSRwokbsZE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-09-30T04:06:37.936155807Z ERROR: [youtube] wHSRwokbsZE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies

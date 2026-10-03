@@ -1,0 +1,7 @@
+ffmpeg.exe
+ffprobe.exe
+ffplay.exe
+cookies.txt
+__pycache__/
+*.pyc
+*.m4a
