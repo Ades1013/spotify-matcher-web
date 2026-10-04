@@ -113,8 +113,7 @@ HTML_INTERFAZ = """
     <script>
         const modalVersiones = new bootstrap.Modal(document.getElementById('modalVersiones'));
         const esClientePC = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost');
-        
-        let dirHandleGuardado = null;
+        let dirHandleNube = null;
         let timerBarra = null;
         let urlsDescargadasPorCancion = {};
         let listaCancionesGlobal = [];
@@ -154,7 +153,7 @@ HTML_INTERFAZ = """
                     exito.textContent = `★ ¡Listo! Se guardaron ${itemsExitosos} de ${itemsTotales} canciones.`;
                 } else if (itemsExitosos > 0) {
                     exito.className = "alert alert-warning text-center mt-4 fw-bold";
-                    exito.textContent = `⚠️ Se guardaron ${itemsExitosos} de ${itemsTotales} canciones activas.`;
+                    exito.textContent = `⚠️️ Se guardaron ${itemsExitosos} de ${itemsTotales} canciones activas.`;
                 } else {
                     exito.className = "alert alert-danger text-center mt-4 fw-bold";
                     exito.textContent = `❌ No se pudo guardar ninguna canción (0 de ${itemsTotales}).`;
@@ -225,19 +224,19 @@ HTML_INTERFAZ = """
         }
 
         async function obtenerOVerificarPermisoCarpeta() {
-            if (dirHandleGuardado) {
+            if (dirHandleNube) {
                 const opciones = { mode: 'readwrite' };
-                if ((await dirHandleGuardado.queryPermission(opciones)) === 'granted') {
-                    return dirHandleGuardado;
+                if ((await dirHandleNube.queryPermission(opciones)) === 'granted') {
+                    return dirHandleNube;
                 }
-                if ((await dirHandleGuardado.requestPermission(opciones)) === 'granted') {
-                    return dirHandleGuardado;
+                if ((await dirHandleNube.requestPermission(opciones)) === 'granted') {
+                    return dirHandleNube;
                 }
             }
 
             try {
-                dirHandleGuardado = await window.showDirectoryPicker({ mode: 'readwrite' });
-                return dirHandleGuardado;
+                dirHandleNube = await window.showDirectoryPicker({ mode: 'readwrite' });
+                return dirHandleNube;
             } catch (err) {
                 return null;
             }
@@ -265,13 +264,13 @@ HTML_INTERFAZ = """
             nombreArchivo = limpiarNombreArchivo(nombreArchivo);
 
             if (!esClientePC && ('showDirectoryPicker' in window)) {
-                if (!dirHandleGuardado) {
-                    dirHandleGuardado = await obtenerOVerificarPermisoCarpeta();
+                if (!dirHandleNube) {
+                    dirHandleNube = await obtenerOVerificarPermisoCarpeta();
                 }
 
-                if (dirHandleGuardado) {
-                    const nombreUnico = await obtenerNombreUnicoEnCarpetaWeb(dirHandleGuardado, nombreArchivo);
-                    const fileHandle = await dirHandleGuardado.getFileHandle(nombreUnico, { create: true });
+                if (dirHandleNube) {
+                    const nombreUnico = await obtenerNombreUnicoEnCarpetaWeb(dirHandleNube, nombreArchivo);
+                    const fileHandle = await dirHandleNube.getFileHandle(nombreUnico, { create: true });
                     const writable = await fileHandle.createWritable();
                     await writable.write(blob);
                     await writable.close();
@@ -319,7 +318,7 @@ HTML_INTERFAZ = """
                         <div class="me-2 text-start">
                             <span class="badge bg-success me-1">Opción ${v.version}</span>
                             <strong>${v.titulo}</strong><br>
-                            <small class="text-secondary">📺 ${v.canal} | ⏱️ ${v.duracion} | 👁 ${v.vistas}</small>
+                            <small class="text-secondary">📺 ${v.canal} | ⏱️ ${v.duracion} | 👁️ ${v.vistas}</small>
                         </div>
                         <span class="btn btn-sm btn-blanco">Descargar</span>
                     `;
@@ -480,8 +479,8 @@ HTML_INTERFAZ = """
                 const datosCarpeta = await respCarpeta.json();
                 if (datosCarpeta.cancelado) return;
             } else if ('showDirectoryPicker' in window) {
-                dirHandleGuardado = await obtenerOVerificarPermisoCarpeta();
-                if (!dirHandleGuardado) {
+                dirHandleNube = await obtenerOVerificarPermisoCarpeta();
+                if (!dirHandleNube) {
                     return;
                 }
             }
@@ -649,17 +648,12 @@ def obtener_opciones_youtube(cancion):
     if cancion in CACHE_OPCIONES and len(CACHE_OPCIONES[cancion]) >= 5:
         return CACHE_OPCIONES[cancion]
 
-    cache_ytdlp = os.path.join(tempfile.gettempdir(), "ytdlp_cache")
     ydl_opts_search = {
         "quiet": True,
         "no_warnings": True,
-        "extract_flat": "in_playlist",
-        "cachedir": cache_ytdlp,
-        "js_runtimes": {"deno": {}},
-        "extractor_args": {"youtube": {"player_client": ["web", "web_embedded"]}},
-        "noplaylist": True,
-        "nocheckcertificate": True,
-        "retries": 1,
+        "skip_download": True,
+        "extract_flat": True,
+        "extractor_args": {"youtube": {"player_client": ["web"]}},
     }
     archivo_cookies = preparar_cookies_yt()
     if archivo_cookies:
@@ -672,9 +666,9 @@ def obtener_opciones_youtube(cancion):
     )
 
     if artista_orig:
-        query_music = f'ytsearch5:"{pista_orig}" {artista_orig} audio'
+        query_music = f'ytsearch20:"{pista_orig}" {artista_orig} audio'
     else:
-        query_music = f'ytsearch5:"{pista_orig}" audio'
+        query_music = f'ytsearch20:"{pista_orig}" audio'
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts_search) as ydl:
@@ -687,34 +681,149 @@ def obtener_opciones_youtube(cancion):
     if not opciones_raw:
         return []
 
-    cache_ultraligero = []
-    for idx, op in enumerate(opciones_raw):
+    opciones_relevantes = []
+    for op in opciones_raw:
         if not op:
             continue
-        vid_id = op.get("id")
-        if not vid_id:
-            continue
+        titulo_v = str(op.get("title", ""))
+        titulo_v_norm = normalizar_texto(titulo_v)
 
+        if palabras_clave_pista:
+            coincidencias = sum(1 for w in palabras_clave_pista if w in titulo_v_norm)
+            min_requerido = max(1, round(len(palabras_clave_pista) * 0.7))
+            if coincidencias < min_requerido:
+                continue
+
+        opciones_relevantes.append(op)
+
+    if not opciones_relevantes:
+        opciones_relevantes = [op for op in opciones_raw if op]
+
+    textos_por_video = [
+        f" {normalizar_texto(op.get('title', ''))} {normalizar_texto(op.get('uploader') or op.get('channel') or '')} "
+        for op in opciones_relevantes
+    ]
+
+    def es_canal_oficial_artista(canal_raw):
+        canal_low = canal_raw.lower()
+        if any(
+            bad in canal_low
+            for bad in [
+                "unofficial",
+                "no oficial",
+                "fan",
+                "tribute",
+                "lyrics",
+                "letra",
+                "radio",
+                "amv",
+            ]
+        ):
+            return False
+
+        raiz_artista = re.sub(
+            r"\b(official|oficial|vevo|topic|music|band|tv|channel|records)\b",
+            "",
+            normalizar_texto(canal_low),
+        ).strip()
+        if len(raiz_artista) < 2:
+            return False
+
+        esta_en_busqueda = (
+            f" {raiz_artista} " in f" {norm_cancion} " or raiz_artista in norm_cancion
+        )
+        repeticiones_en_lista = sum(
+            1 for txt in textos_por_video if f" {raiz_artista} " in txt
+        )
+        umbral_minimo = 2 if len(opciones_relevantes) < 4 else 3
+        es_artista_implicito = repeticiones_en_lista >= umbral_minimo
+
+        return esta_en_busqueda or es_artista_implicito
+
+    palabras_no_deseadas = [
+        "live",
+        "en vivo",
+        "concert",
+        "concierto",
+        "festival",
+        "wacken",
+        "tour",
+        "cover",
+        "tribute",
+        "full album",
+        "slowed",
+        "nightcore",
+        "revisited",
+    ]
+
+    opciones_clasificadas = []
+    for op in opciones_relevantes:
+        titulo_raw = op.get("title", "Desconocido")
+        canal_raw = op.get("uploader") or op.get("channel") or "Desconocido"
+        titulo = str(titulo_raw).lower()
+        canal = str(canal_raw).lower()
+        descripcion = str(op.get("description") or "").lower()
+        vistas = int(op.get("view_count") or 0)
+        url_vid = op.get("url") or (
+            f"https://www.youtube.com/watch?v={op.get('id')}" if op.get("id") else ""
+        )
+
+        es_no_deseada = (
+            any(kw in titulo or kw in canal for kw in palabras_no_deseadas)
+            and not busca_en_vivo
+        )
+        es_oficial = es_canal_oficial_artista(canal)
+
+        if es_no_deseada:
+            nivel = -1
+        elif es_oficial:
+            nivel = 4
+        elif (
+            "topic" in canal
+            or "provided to youtube by" in descripcion
+            or "auto-generated by youtube" in descripcion
+        ):
+            nivel = 3
+        elif "official audio" in titulo or "audio oficial" in titulo:
+            nivel = 2
+        else:
+            nivel = 1
+
+        opciones_clasificadas.append(
+            {
+                "title": titulo_raw,
+                "uploader": canal_raw,
+                "duration": op.get("duration"),
+                "view_count": vistas,
+                "url": url_vid,
+                "_nivel": nivel,
+            }
+        )
+
+    opciones_clasificadas.sort(
+        key=lambda x: (x["_nivel"], x["view_count"]), reverse=True
+    )
+
+    cache_ultraligero = []
+    for op in opciones_clasificadas[:10]:
         dur = op.get("duration")
         if dur:
             m, s = divmod(int(dur), 60)
             dur_str = f"{m:02d}:{s:02d}"
         else:
-            dur_str = "N/D"
+            dur_str = "N/A"
 
         cache_ultraligero.append(
             {
                 "title": str(op.get("title", "Desconocido")),
-                "uploader": str(op.get("uploader") or op.get("channel") or "Oficial"),
+                "uploader": str(op.get("uploader", "Desconocido")),
                 "duration": dur_str,
                 "view_count": int(op.get("view_count") or 0),
-                "url": f"https://www.youtube.com/watch?v={vid_id}",
+                "url": str(op.get("url") or ""),
             }
         )
-        if len(cache_ultraligero) >= 5:
-            break
 
-    del opciones_raw
+    del opciones_raw, opciones_relevantes, opciones_clasificadas
     if "info" in locals():
         del info
     gc.collect()
@@ -787,7 +896,6 @@ def ejecutar_descarga_yt(url_video, carpeta_destino):
     ydl_opts_download = {
         "quiet": True,
         "no_warnings": True,
-        "noprogress": True,
         "nopart": True,
         "windowsfilenames": True,
         "nocheckcertificate": True,
@@ -959,8 +1067,12 @@ def descargar_una():
                 if not opciones:
                     return f"No se encontraron resultados válidos para: {cancion}", 404
 
-                for idx_op, op in enumerate(opciones[:2]):
-                    print(f"⬇️ Descargando: {op.get('title')}...")
+                for idx_op, op in enumerate(opciones[:3]):
+                    canal_elegido = op.get("uploader", "YT")
+                    vistas_elegidas = formatear_vistas(op.get("view_count"))
+                    print(
+                        f"⬇️ Probando #{idx_op + 1}: {op.get('title')} ({canal_elegido} | {vistas_elegidas})..."
+                    )
                     try:
                         ruta_archivo = ejecutar_descarga_yt(op.get("url"), temp_dir)
                         if ruta_archivo and os.path.exists(ruta_archivo):
