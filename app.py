@@ -114,7 +114,6 @@ HTML_INTERFAZ = """
         const modalVersiones = new bootstrap.Modal(document.getElementById('modalVersiones'));
         const esClientePC = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost');
         
-        // Variable persistente durante la sesión abierta en la pestaña
         let dirHandleGuardado = null;
         let timerBarra = null;
         let urlsDescargadasPorCancion = {};
@@ -225,7 +224,6 @@ HTML_INTERFAZ = """
             return nombre.replace(/[<>:"/\\\\|?*]+/g, ' ').replace(/\\s+/g, ' ').trim();
         }
 
-        // Cambio 1: Reutilización de permisos activos sin volver a abrir el diálogo si ya está concedido
         async function obtenerOVerificarPermisoCarpeta() {
             if (dirHandleGuardado) {
                 const opciones = { mode: 'readwrite' };
@@ -263,7 +261,6 @@ HTML_INTERFAZ = """
             }
         }
 
-        // Cambio 2: Escritura directa utilizando dirHandleGuardado con soporte de fallback
         async function guardarBlobEnDispositivo(blob, nombreArchivo) {
             nombreArchivo = limpiarNombreArchivo(nombreArchivo);
 
@@ -322,7 +319,7 @@ HTML_INTERFAZ = """
                         <div class="me-2 text-start">
                             <span class="badge bg-success me-1">Opción ${v.version}</span>
                             <strong>${v.titulo}</strong><br>
-                            <small class="text-secondary">📺 ${v.canal} | ⏱️ ${v.duracion} | 👁️️ ${v.vistas}</small>
+                            <small class="text-secondary">📺 ${v.canal} | ⏱️ ${v.duracion} | 👁 ${v.vistas}</small>
                         </div>
                         <span class="btn btn-sm btn-blanco">Descargar</span>
                     `;
@@ -652,12 +649,16 @@ def obtener_opciones_youtube(cancion):
     if cancion in CACHE_OPCIONES and len(CACHE_OPCIONES[cancion]) >= 5:
         return CACHE_OPCIONES[cancion]
 
+    cache_ytdlp = os.path.join(tempfile.gettempdir(), "ytdlp_cache")
     ydl_opts_search = {
         "quiet": True,
         "no_warnings": True,
-        "skip_download": True,
-        "extract_flat": True,
-        "extractor_args": {"youtube": {"player_client": ["web"]}},
+        "extract_flat": "in_playlist",
+        "cachedir": cache_ytdlp,
+        "js_runtimes": {"deno": {}},
+        "extractor_args": {"youtube": {"player_client": ["web", "web_embedded"]}},
+        "noplaylist": True,
+        "retries": 1,
     }
     archivo_cookies = preparar_cookies_yt()
     if archivo_cookies:
@@ -670,9 +671,9 @@ def obtener_opciones_youtube(cancion):
     )
 
     if artista_orig:
-        query_music = f'ytsearch20:"{pista_orig}" {artista_orig} audio'
+        query_music = f'ytsearch10:"{pista_orig}" {artista_orig} audio'
     else:
-        query_music = f'ytsearch20:"{pista_orig}" audio'
+        query_music = f'ytsearch10:"{pista_orig}" audio'
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts_search) as ydl:
@@ -809,7 +810,7 @@ def obtener_opciones_youtube(cancion):
     )
 
     cache_ultraligero = []
-    for op in opciones_clasificadas[:10]:
+    for op in opciones_clasificadas[:5]:
         dur = op.get("duration")
         if dur:
             m, s = divmod(int(dur), 60)
