@@ -113,7 +113,9 @@ HTML_INTERFAZ = """
     <script>
         const modalVersiones = new bootstrap.Modal(document.getElementById('modalVersiones'));
         const esClientePC = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost');
-        let dirHandleNube = null;
+        
+        // Variable persistente durante la sesión abierta en la pestaña
+        let dirHandleGuardado = null;
         let timerBarra = null;
         let urlsDescargadasPorCancion = {};
         let listaCancionesGlobal = [];
@@ -137,7 +139,6 @@ HTML_INTERFAZ = """
             contadorProgreso.textContent = `${posicionActual}/${totalElementos}`;
         }
 
-        // Calcula el total real de canciones descargadas contando los elementos en pantalla
         function actualizarResumenContadoresFinal() {
             const contadorProgreso = document.getElementById('contadorProgreso');
             const exito = document.getElementById('exito');
@@ -224,6 +225,26 @@ HTML_INTERFAZ = """
             return nombre.replace(/[<>:"/\\\\|?*]+/g, ' ').replace(/\\s+/g, ' ').trim();
         }
 
+        // Cambio 1: Reutilización de permisos activos sin volver a abrir el diálogo si ya está concedido
+        async function obtenerOVerificarPermisoCarpeta() {
+            if (dirHandleGuardado) {
+                const opciones = { mode: 'readwrite' };
+                if ((await dirHandleGuardado.queryPermission(opciones)) === 'granted') {
+                    return dirHandleGuardado;
+                }
+                if ((await dirHandleGuardado.requestPermission(opciones)) === 'granted') {
+                    return dirHandleGuardado;
+                }
+            }
+
+            try {
+                dirHandleGuardado = await window.showDirectoryPicker({ mode: 'readwrite' });
+                return dirHandleGuardado;
+            } catch (err) {
+                return null;
+            }
+        }
+
         async function obtenerNombreUnicoEnCarpetaWeb(dirHandle, nombreBase) {
             let nombreFinal = nombreBase;
             const punto = nombreBase.lastIndexOf('.');
@@ -242,26 +263,34 @@ HTML_INTERFAZ = """
             }
         }
 
+        // Cambio 2: Escritura directa utilizando dirHandleGuardado con soporte de fallback
         async function guardarBlobEnDispositivo(blob, nombreArchivo) {
             nombreArchivo = limpiarNombreArchivo(nombreArchivo);
-            if (dirHandleNube) {
-                const nombreUnico = await obtenerNombreUnicoEnCarpetaWeb(dirHandleNube, nombreArchivo);
-                const fileHandle = await dirHandleNube.getFileHandle(nombreUnico, { create: true });
-                const writable = await fileHandle.createWritable();
-                await writable.write(blob);
-                await writable.close();
-                return nombreUnico;
-            } else {
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = nombreArchivo;
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                window.URL.revokeObjectURL(url);
-                return nombreArchivo;
+
+            if (!esClientePC && ('showDirectoryPicker' in window)) {
+                if (!dirHandleGuardado) {
+                    dirHandleGuardado = await obtenerOVerificarPermisoCarpeta();
+                }
+
+                if (dirHandleGuardado) {
+                    const nombreUnico = await obtenerNombreUnicoEnCarpetaWeb(dirHandleGuardado, nombreArchivo);
+                    const fileHandle = await dirHandleGuardado.getFileHandle(nombreUnico, { create: true });
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(blob);
+                    await writable.close();
+                    return nombreUnico;
+                }
             }
+
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = nombreArchivo;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+            return nombreArchivo;
         }
 
         async function abrirSelectorVersiones(cancionTexto) {
@@ -293,7 +322,7 @@ HTML_INTERFAZ = """
                         <div class="me-2 text-start">
                             <span class="badge bg-success me-1">Opción ${v.version}</span>
                             <strong>${v.titulo}</strong><br>
-                            <small class="text-secondary">📺 ${v.canal} | ⏱️ ${v.duracion} | 👁️ ${v.vistas}</small>
+                            <small class="text-secondary">📺 ${v.canal} | ⏱️ ${v.duracion} | 👁️️ ${v.vistas}</small>
                         </div>
                         <span class="btn btn-sm btn-blanco">Descargar</span>
                     `;
@@ -308,10 +337,7 @@ HTML_INTERFAZ = """
         function encolarVersionEspecifica(cancion, urlVideo, tituloVideo) {
             modalVersiones.hide();
 
-            // Exclusión inmediata de la opción para evitar duplicados
             registrarUrlDescargada(cancion, urlVideo);
-
-            // Ocultar mensaje final viejo mientras se descargan las nuevas versiones
             document.getElementById('exito').style.display = 'none';
 
             modoColaVersiones = true;
@@ -321,7 +347,6 @@ HTML_INTERFAZ = """
             const nuevoId = idItemContador;
             const listaResultados = document.getElementById('listaResultados');
 
-            // Fila limpia sin botón para versiones secundarias
             listaResultados.insertAdjacentHTML('beforeend', `
                 <li class="list-group-item bg-transparent text-secondary border-secondary d-flex justify-content-between align-items-center" id="fila-${nuevoId}">
                     <span id="item-texto-${nuevoId}" class="me-2 text-warning">⏳ En cola: ${escaparHtml(tituloVideo || cancion)}</span>
@@ -345,8 +370,6 @@ HTML_INTERFAZ = """
 
             if (colaDescargas.length === 0) {
                 detenerAvanceBarra(100, true);
-                
-                // Actualizar contadores y cartel con el total consolidado
                 actualizarResumenContadoresFinal();
 
                 modoColaVersiones = false;
@@ -455,15 +478,13 @@ HTML_INTERFAZ = """
                 return;
             }
 
-            dirHandleNube = null;
             if (esClientePC) {
                 const respCarpeta = await fetch('/elegir_carpeta_pc', { method: 'POST' });
                 const datosCarpeta = await respCarpeta.json();
                 if (datosCarpeta.cancelado) return;
             } else if ('showDirectoryPicker' in window) {
-                try {
-                    dirHandleNube = await window.showDirectoryPicker({ mode: 'readwrite' });
-                } catch (err) {
+                dirHandleGuardado = await obtenerOVerificarPermisoCarpeta();
+                if (!dirHandleGuardado) {
                     return;
                 }
             }
@@ -543,7 +564,14 @@ def preparar_cookies_yt():
     if RUTA_COOKIES_MEMORIA and os.path.exists(RUTA_COOKIES_MEMORIA):
         return RUTA_COOKIES_MEMORIA
 
-    rutas_posibles = ["/etc/secrets/cookies.txt", "/app/cookies.txt", "cookies.txt"]
+    rutas_posibles = [
+        "/etc/secrets/cookies_incognito_mayo26.txt",
+        "/etc/secrets/cookies.txt",
+        "/app/cookies_incognito_mayo26.txt",
+        "/app/cookies.txt",
+        "cookies_incognito_mayo26.txt",
+        "cookies.txt",
+    ]
     ruta_origen = next((r for r in rutas_posibles if os.path.exists(r)), None)
     if not ruta_origen:
         return None
@@ -863,14 +891,12 @@ def ejecutar_descarga_yt(url_video, carpeta_destino):
     archivo_cookies = preparar_cookies_yt()
     cache_ytdlp = os.path.join(tempfile.gettempdir(), "ytdlp_cache")
 
-    # Limpiar carpeta temporal antes de la descarga
     for f in os.listdir(carpeta_destino):
         try:
             os.remove(os.path.join(carpeta_destino, f))
         except OSError:
             pass
 
-    # Cliente web con soporte de cookies y Deno en un solo intento directo (sin reintentos fallidos de Android)
     ydl_opts_download = {
         "quiet": True,
         "no_warnings": True,
