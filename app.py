@@ -49,30 +49,55 @@ HTML_INTERFAZ = """
             <div class="col-md-7">
                 <div class="text-center mb-4">
                     <h2 class="fw-bold">🎵 Spotify Matcher <span class="badge bg-success">Web Edition</span></h2>
-                    <p class="text-light opacity-75">Elige tu carpeta una sola vez y descarga tus canciones en .m4a</p>
-                </div>
-                
-                <div class="card p-4 shadow-lg">
-                    <form id="formDescarga">
-                        <div class="mb-3">
-                            <label for="archivo_lista" class="form-label">1. Sube tu archivo (.txt o .csv de Spotify)</label>
-                            <input class="form-control" type="file" id="archivo_lista" name="archivo_lista" accept=".txt,.csv">
-                        </div>
+                    <!-- SECCIÓN FORMULARIO DE ENTRADA -->
+    <div class="card-container" style="max-width: 650px; margin: 0 auto; padding: 20px;">
+        
+        <p style="text-align: center; margin-bottom: 25px; font-size: 1.05rem; color: #b3b3b3;">
+            Elige tus canciones preferidas y en un momento todas serán tuyas
+        </p>
 
-                        <div class="text-center my-2 text-secondary fw-bold">— O TAMBIÉN PUEDES —</div>
+        <!-- 1. Cargar Archivo -->
+        <div style="margin-bottom: 20px;">
+            <label for="archivo" style="display: block; margin-bottom: 8px; font-weight: bold;">
+                1. Sube tu lista de canciones (Bloc de notas, Word, Excel, Pdf, Etc...)
+            </label>
+            <input type="file" id="archivo" name="archivo" class="form-control" style="width: 100%;" />
+        </div>
 
-                        <div class="mb-4">
-                            <label for="texto_canciones" class="form-label">2. Escribir las canciones directamente (una por línea o separadas por coma)</label>
-                            <textarea class="form-control" id="texto_canciones" name="texto_canciones" rows="3" spellcheck="true" lang="es" placeholder="Ej: Rammstein - Du Hast, The Haunting (Somewhere in Time)"></textarea>
-                        </div>
-                        
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-verde btn-lg" id="btnDescargar">
-                                📁 Elegir Carpeta y Descargar
-                            </button>
-                            <button type="button" class="btn btn-blanco" id="btnLimpiar" onclick="limpiarFormulario()">
-                                🧹 Limpiar Todo
-                            </button>
+        <!-- Separador Destacado -->
+        <div style="text-align: center; margin: 25px 0;">
+            <span style="background-color: #1DB954; color: #ffffff; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; padding: 6px 16px; border-radius: 20px; display: inline-block; box-shadow: 0 2px 8px rgba(29, 185, 84, 0.3);">
+                — O TAMBIÉN PUEDES —
+            </span>
+        </div>
+
+        <!-- 2. Escribir canciones directamente -->
+        <div style="margin-bottom: 25px;">
+            <label for="lista_canciones" style="display: block; margin-bottom: 8px; font-weight: bold;">
+                2. Escribir las canciones directamente (una por línea o separadas por coma)
+            </label>
+            <textarea 
+                id="lista_canciones" 
+                name="lista_canciones" 
+                rows="4" 
+                class="form-control" 
+                style="width: 100%; resize: vertical;"
+                placeholder="Ej: Canción 1, Canción 2, Canción 3 ... ó&#10;Canción 1&#10;Canción 2"
+            ></textarea>
+        </div>
+
+        <!-- 3. Botón de Acción Principal -->
+        <button 
+            type="button" 
+            id="btnDescargar" 
+            onclick="iniciarProceso()" 
+            class="btn-primary" 
+            style="width: 100%; padding: 14px; font-size: 1.05rem; font-weight: bold; background-color: #1DB954; color: #ffffff; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;"
+        >
+            <span>📁</span> Elige Donde Guardarlas y Listo !!!
+        </button>
+
+    </div>
                         </div>
                     </form>
 
