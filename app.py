@@ -45,10 +45,12 @@ HTML_INTERFAZ = """
         .enlace-audio-verde:hover { color: #20c997; }
         .enlace-audio-naranja { color: #ffc107; text-decoration: underline; cursor: pointer; font-weight: 600; }
         .enlace-audio-naranja:hover { color: #ffca2c; }
-        .btn-eliminar-item {
+        
+        /* Boton X blanco discreto */
+        .btn-cancelar-cancion {
             background-color: transparent;
             color: #ffffff;
-            border: 1px solid #555555;
+            border: 1px solid #666666;
             border-radius: 4px;
             padding: 2px 7px;
             font-size: 0.85rem;
@@ -56,10 +58,36 @@ HTML_INTERFAZ = """
             cursor: pointer;
             transition: all 0.2s;
         }
-        .btn-eliminar-item:hover {
+        .btn-cancelar-cancion:hover {
             background-color: #dc3545;
             border-color: #dc3545;
             color: #ffffff;
+        }
+
+        /* Chips de archivos seleccionados */
+        .badge-archivo {
+            background-color: #2c2c2c;
+            color: #ffffff;
+            border: 1px solid #444444;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .badge-archivo .btn-x-archivo {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 0.85rem;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0 2px;
+        }
+        .badge-archivo .btn-x-archivo:hover {
+            color: #ff6b6b;
         }
     </style>
 </head>
@@ -77,17 +105,20 @@ HTML_INTERFAZ = """
                     <form id="formDescarga">
                         <div style="background-color: #181818; border: 1px solid #282828; border-radius: 8px; padding: 24px; max-width: 680px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
                             
-                            <!-- 1. Sube tu archivo (soporta seleccion multiple) -->
-                            <label for="archivo_lista" class="text-start d-block" style="font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: #ffffff;">
+                            <!-- 1. Sube tu lista de canciones acumulativa -->
+                            <label class="text-start d-block" style="font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: #ffffff;">
                                 1. Sube tu lista de canciones (Bloc de notas, Word, Excel, Pdf, Etc...)
                             </label>
                             <input 
                                 type="file" 
-                                id="archivo_lista" 
-                                name="archivo_lista" 
+                                id="archivo_selector" 
                                 multiple 
-                                style="width: 100%; box-sizing: border-box; background-color: #282828; color: #b3b3b3; border: 1px solid #3e3e3e; border-radius: 4px; padding: 8px 12px; margin-bottom: 16px; font-size: 0.9rem;" 
+                                onchange="manejarSeleccionArchivos(event)"
+                                style="width: 100%; box-sizing: border-box; background-color: #282828; color: #b3b3b3; border: 1px solid #3e3e3e; border-radius: 4px; padding: 8px 12px; margin-bottom: 8px; font-size: 0.9rem;" 
                             />
+                            
+                            <!-- Lista visual de archivos cargados -->
+                            <div id="contenedorChipsArchivos" class="d-flex flex-wrap gap-2 mb-3"></div>
 
                             <!-- Separador Estilo Badge -->
                             <div style="text-align: center; margin: 18px 0;">
@@ -132,7 +163,7 @@ HTML_INTERFAZ = """
                         </div>
                     </form>
 
-                    <!-- Barra reproductora rapida -->
+                    <!-- Reproductor integrado -->
                     <div id="contenedorReproductor" class="mt-3 p-2 bg-dark border border-secondary rounded" style="display: none;">
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <span id="reproductorTitulo" class="small text-truncate me-2 fw-semibold text-light"></span>
@@ -186,15 +217,49 @@ HTML_INTERFAZ = """
         let colaDescargas = [];
         let procesandoDescarga = false;
         let tareaActivaActual = null;
+        let abortControllerActual = null;
 
         let totalEncoladasVersiones = 0;
         let procesadasVersiones = 0;
         let modoColaVersiones = false;
         let idItemContador = 1000;
 
+        // Lista acumulativa de archivos cargados en memoria
+        let archivosSeleccionados = [];
+
         function escaparHtml(texto) {
             if (!texto) return '';
             return texto.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        function manejarSeleccionArchivos(evento) {
+            const nuevosArchivos = Array.from(evento.target.files);
+            nuevosArchivos.forEach(nuevo => {
+                if (!archivosSeleccionados.some(a => a.name === nuevo.name && a.size === nuevo.size)) {
+                    archivosSeleccionados.push(nuevo);
+                }
+            });
+            evento.target.value = '';
+            renderizarChipsArchivos();
+        }
+
+        function eliminarArchivoIndividual(indice) {
+            archivosSeleccionados.splice(indice, 1);
+            renderizarChipsArchivos();
+        }
+
+        function renderizarChipsArchivos() {
+            const contenedor = document.getElementById('contenedorChipsArchivos');
+            contenedor.innerHTML = '';
+            archivosSeleccionados.forEach((arch, idx) => {
+                const chip = document.createElement('div');
+                chip.className = 'badge-archivo';
+                chip.innerHTML = `
+                    <span>📄 ${escaparHtml(arch.name)}</span>
+                    <button type="button" class="btn-x-archivo" onclick="eliminarArchivoIndividual(${idx})" title="Quitar archivo">✖</button>
+                `;
+                contenedor.appendChild(chip);
+            });
         }
 
         function reproducirEnNavegador(urlAudio, titulo) {
@@ -216,19 +281,25 @@ HTML_INTERFAZ = """
             contenedor.style.display = 'none';
         }
 
-        async function eliminarArchivoDescargado(itemId, nombreArchivo) {
-            if (!confirm(`¿Deseas quitar "${nombreArchivo}" de la lista y del disco?`)) return;
-
-            if (dirHandleNube && ('removeEntry' in dirHandleNube)) {
-                try {
-                    await dirHandleNube.removeEntry(nombreArchivo);
-                } catch (e) {
-                    console.warn("No se pudo remover físicamente del disco:", e);
+        function cancelarOEliminarCancionEnCola(itemId) {
+            // Caso 1: La cancion se esta descargando en este mismo instante
+            if (tareaActivaActual && tareaActivaActual.itemId === itemId) {
+                if (abortControllerActual) {
+                    abortControllerActual.abort();
                 }
+                const fila = document.getElementById(`fila-${itemId}`);
+                if (fila) fila.remove();
+                return;
             }
 
+            // Caso 2: La cancion aun esta esperando en la cola
+            const indice = colaDescargas.findIndex(t => t.itemId === itemId);
+            if (indice !== -1) {
+                colaDescargas.splice(indice, 1);
+            }
             const fila = document.getElementById(`fila-${itemId}`);
             if (fila) fila.remove();
+
             actualizarResumenContadoresFinal();
         }
 
@@ -308,6 +379,8 @@ HTML_INTERFAZ = """
             urlsDescargadasPorCancion = {};
             listaCancionesGlobal = [];
             colaDescargas = [];
+            archivosSeleccionados = [];
+            renderizarChipsArchivos();
             procesandoDescarga = false;
             tareaActivaActual = null;
             modoColaVersiones = false;
@@ -418,7 +491,7 @@ HTML_INTERFAZ = """
                         <div class="me-2 text-start">
                             <span class="badge bg-warning text-dark me-1">Opción ${v.version}</span>
                             <strong>${v.titulo}</strong><br>
-                            <small class="text-secondary">📺 ${v.canal} | ⏱️️ ${v.duracion} | 👁️ ${v.vistas}</small>
+                            <small class="text-secondary">📺 ${v.canal} | ⏱ ${v.duracion} | 👁️ ${v.vistas}</small>
                         </div>
                         <span class="btn btn-sm btn-blanco">Descargar</span>
                     `;
@@ -446,7 +519,9 @@ HTML_INTERFAZ = """
             listaResultados.insertAdjacentHTML('beforeend', `
                 <li class="list-group-item bg-transparent text-secondary border-secondary d-flex justify-content-between align-items-center" id="fila-${nuevoId}">
                     <span id="item-texto-${nuevoId}" class="me-2 text-warning">⏳ En cola: ${escaparHtml(tituloVideo || cancion)}</span>
-                    <div id="item-acciones-${nuevoId}" class="d-flex align-items-center gap-2"></div>
+                    <div id="item-acciones-${nuevoId}" class="d-flex align-items-center gap-2">
+                        <button type="button" class="btn-cancelar-cancion" title="Cancelar esta canción" onclick="cancelarOEliminarCancionEnCola('${nuevoId}')">✖</button>
+                    </div>
                 </li>
             `);
 
@@ -500,6 +575,7 @@ HTML_INTERFAZ = """
             }
 
             iniciarAvanceBarra(20, 90);
+            abortControllerActual = new AbortController();
 
             try {
                 const respAudio = await fetch('/descargar_una', {
@@ -509,7 +585,8 @@ HTML_INTERFAZ = """
                         cancion: cancion,
                         url: urlVideo || "",
                         guardar_en_pc: esClientePC
-                    })
+                    }),
+                    signal: abortControllerActual.signal
                 });
 
                 if (respAudio.ok) {
@@ -554,12 +631,13 @@ HTML_INTERFAZ = """
                             spanTexto.innerHTML = `${iconoPrefijo} ${escaparHtml(guardadoComo)}`;
                         }
 
+                        // LA X DESAPARECE AUTOMÁTICAMENTE: Dejamos únicamente el botón "Otra versión"
                         if (divAcciones) {
-                            divAcciones.insertAdjacentHTML('beforeend', `
-                                <button type="button" class="btn-eliminar-item" title="Eliminar archivo" onclick="eliminarArchivoDescargado('${itemId}', '${escaparHtml(guardadoComo)}')">
-                                    ✖
+                            divAcciones.innerHTML = `
+                                <button type="button" class="btn btn-sm btn-outline-light flex-shrink-0 btn-otra-version" onclick="abrirSelectorVersiones('${escaparHtml(cancion)}')">
+                                    🔄 Otra versión
                                 </button>
-                            `);
+                            `;
                         }
                     }
                 } else {
@@ -569,19 +647,24 @@ HTML_INTERFAZ = """
                             liPadre.className = "list-group-item bg-transparent text-danger border-secondary d-flex justify-content-between align-items-center";
                         }
                         spanTexto.innerHTML = `<span class="text-danger">❌ Falló descarga: ${escaparHtml(cancion)}</span>`;
+                        if (divAcciones) divAcciones.innerHTML = '';
                     }
                 }
             } catch (err) {
-                if (spanTexto) {
+                if (err.name === 'AbortError') {
+                    console.log(`Descarga cancelada por el usuario: ${cancion}`);
+                } else if (spanTexto) {
                     const liPadre = spanTexto.closest('li');
                     if (liPadre) {
                         liPadre.className = "list-group-item bg-transparent text-danger border-secondary d-flex justify-content-between align-items-center";
                     }
                     spanTexto.innerHTML = `<span class="text-danger">❌ Error de conexión: ${escaparHtml(cancion)}</span>`;
+                    if (divAcciones) divAcciones.innerHTML = '';
                 }
             } finally {
                 procesandoDescarga = false;
                 tareaActivaActual = null;
+                abortControllerActual = null;
                 procesarSiguienteEnCola();
             }
         }
@@ -592,11 +675,9 @@ HTML_INTERFAZ = """
                 if (!confirm("Hay descargas en progreso o en cola. ¿Deseas reiniciar la lista?")) return;
             }
 
-            const inputArchivo = document.getElementById('archivo_lista');
-            const archivoCargado = inputArchivo && inputArchivo.files && inputArchivo.files.length > 0;
             const texto = document.getElementById('texto_canciones').value.trim();
-            if (!archivoCargado && !texto) {
-                alert("Por favor sube un archivo o ingresa canciones en el campo de texto.");
+            if (archivosSeleccionados.length === 0 && !texto) {
+                alert("Por favor sube al menos un archivo o escribe canciones en el campo de texto.");
                 return;
             }
 
@@ -630,7 +711,11 @@ HTML_INTERFAZ = """
             textoEstado.textContent = "Leyendo lista de canciones...";
             iniciarAvanceBarra(10, 25);
 
-            const formData = new FormData(this);
+            const formData = new FormData();
+            formData.append('texto_canciones', texto);
+            archivosSeleccionados.forEach(arch => {
+                formData.append('archivo_lista', arch);
+            });
 
             try {
                 const respLista = await fetch('/obtener_lista', { method: 'POST', body: formData });
@@ -653,8 +738,8 @@ HTML_INTERFAZ = """
                         <li class="list-group-item bg-transparent text-secondary border-secondary d-flex justify-content-between align-items-center" id="fila-${idx}">
                             <span id="item-texto-${idx}" class="me-2">⏳ En cola: ${escaparHtml(cancion)}</span>
                             <div id="item-acciones-${idx}" class="d-flex align-items-center gap-2">
-                                <button type="button" class="btn btn-sm btn-outline-light flex-shrink-0 btn-otra-version" onclick="abrirSelectorVersiones('${escaparHtml(cancion)}')">
-                                    🔄 Otra versión
+                                <button type="button" class="btn-cancelar-cancion" title="Cancelar esta canción" onclick="cancelarOEliminarCancionEnCola('${idx}')">
+                                    ✖
                                 </button>
                             </div>
                         </li>
