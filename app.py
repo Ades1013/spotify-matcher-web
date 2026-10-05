@@ -41,11 +41,19 @@ HTML_INTERFAZ = """
         #panelProgreso, #exito { display: none; }
         #barraProgreso { transition: width 0.25s ease; }
         .btn-otra-version { transition: all 0.2s ease; }
+        
+        /* Enlaces de reproduccion segun estado */
         .enlace-audio-verde { color: #198754; text-decoration: underline; cursor: pointer; font-weight: 600; }
         .enlace-audio-verde:hover { color: #20c997; }
         .enlace-audio-naranja { color: #ffc107; text-decoration: underline; cursor: pointer; font-weight: 600; }
         .enlace-audio-naranja:hover { color: #ffca2c; }
         
+        /* Estado activo de descarga: Azul electrico moderno */
+        .texto-descargando-activo {
+            color: #38bdf8 !important;
+            font-weight: 700;
+        }
+
         /* Boton X blanco discreto */
         .btn-cancelar-cancion {
             background-color: transparent;
@@ -62,6 +70,37 @@ HTML_INTERFAZ = """
             background-color: #dc3545;
             border-color: #dc3545;
             color: #ffffff;
+        }
+
+        /* Selector personalizado de archivos con contador */
+        .custom-file-box {
+            display: flex;
+            align-items: center;
+            background-color: #282828;
+            border: 1px solid #3e3e3e;
+            border-radius: 4px;
+            padding: 6px 12px;
+            gap: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        .btn-falso-archivo {
+            background-color: #3e3e3e;
+            color: #ffffff;
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            user-select: none;
+        }
+        .texto-falso-archivo {
+            color: #b3b3b3;
+            font-size: 0.9rem;
+            user-select: none;
+        }
+        .texto-falso-archivo.activo {
+            color: #38bdf8;
+            font-weight: 600;
         }
 
         /* Chips de archivos seleccionados */
@@ -98,7 +137,6 @@ HTML_INTERFAZ = """
                 <div class="text-center mb-4">
                     <h2 class="fw-bold">🎵 Spotify Matcher <span class="badge bg-success">Web Edition</span></h2>
                     
-                    <!-- 4. Subtitulo Actualizado -->
                     <p style="text-align: center; color: #b3b3b3; margin-top: 8px; margin-bottom: 25px; font-size: 0.95rem;">
                         Elige tus canciones preferidas y luego a disfrutarlas.
                     </p>
@@ -106,29 +144,35 @@ HTML_INTERFAZ = """
                     <form id="formDescarga">
                         <div style="background-color: #181818; border: 1px solid #282828; border-radius: 8px; padding: 24px; max-width: 680px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
                             
-                            <!-- 1. Sube tu lista de canciones -->
+                            <!-- 1. Sube tu lista de canciones con contador dinámico -->
                             <label class="text-start d-block" style="font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: #ffffff;">
                                 1. Sube tu lista de canciones (Bloc de notas, Word, Excel, Pdf)
                             </label>
+                            
+                            <!-- Input real oculto y caja interactiva con contador -->
                             <input 
                                 type="file" 
                                 id="archivo_selector" 
                                 multiple 
                                 onchange="manejarSeleccionArchivos(event)"
-                                style="width: 100%; box-sizing: border-box; background-color: #282828; color: #b3b3b3; border: 1px solid #3e3e3e; border-radius: 4px; padding: 8px 12px; margin-bottom: 8px; font-size: 0.9rem;" 
+                                style="display: none;" 
                             />
+                            <div class="custom-file-box" onclick="document.getElementById('archivo_selector').click()">
+                                <div class="btn-falso-archivo">Elegir archivos</div>
+                                <span id="indicadorArchivosTexto" class="texto-falso-archivo">Sin archivos seleccionados</span>
+                            </div>
                             
                             <!-- Chips acumulativos de archivos -->
                             <div id="contenedorChipsArchivos" class="d-flex flex-wrap gap-2 mb-3"></div>
 
-                            <!-- 5. Separador Estilo Badge Actualizado -->
+                            <!-- Separador Estilo Badge -->
                             <div style="text-align: center; margin: 18px 0;">
                                 <span class="badge bg-success" style="font-weight: 700; font-size: 0.85rem; padding: 6px 16px; border-radius: 6px;">
                                     \\ O TAMBIÉN PUEDES /
                                 </span>
                             </div>
 
-                            <!-- 3. Escribir canciones directamente (Orden invertido) -->
+                            <!-- 2. Escribir canciones directamente -->
                             <label for="texto_canciones" class="text-start d-block" style="font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: #ffffff;">
                                 2. Escribir las canciones directamente (Separadas por coma o una en cada línea)
                             </label>
@@ -241,12 +285,29 @@ HTML_INTERFAZ = """
                 }
             });
             evento.target.value = '';
+            actualizarIndicadorArchivos();
             renderizarChipsArchivos();
         }
 
         function eliminarArchivoIndividual(indice) {
             archivosSeleccionados.splice(indice, 1);
+            actualizarIndicadorArchivos();
             renderizarChipsArchivos();
+        }
+
+        function actualizarIndicadorArchivos() {
+            const spanTexto = document.getElementById('indicadorArchivosTexto');
+            const total = archivosSeleccionados.length;
+            if (total === 0) {
+                spanTexto.textContent = 'Sin archivos seleccionados';
+                spanTexto.classList.remove('activo');
+            } else if (total === 1) {
+                spanTexto.textContent = '📂 1 archivo seleccionado';
+                spanTexto.classList.add('activo');
+            } else {
+                spanTexto.textContent = `📂 ${total} archivos seleccionados`;
+                spanTexto.classList.add('activo');
+            }
         }
 
         function renderizarChipsArchivos() {
@@ -285,7 +346,7 @@ HTML_INTERFAZ = """
         function cancelarOEliminarCancionEnCola(itemId) {
             itemsCanceladosSet.add(String(itemId));
 
-            // Caso 1: La cancion se esta descargando en este instante
+            // Caso 1: La cancion se esta procesando activamente
             if (tareaActivaActual && String(tareaActivaActual.itemId) === String(itemId)) {
                 if (abortControllerActual) {
                     abortControllerActual.abort();
@@ -295,7 +356,7 @@ HTML_INTERFAZ = """
                 return;
             }
 
-            // Caso 2: La cancion esta en cola de espera
+            // Caso 2: La cancion aun esta esperando en la cola
             const indice = colaDescargas.findIndex(t => String(t.itemId) === String(itemId));
             if (indice !== -1) {
                 colaDescargas.splice(indice, 1);
@@ -303,13 +364,11 @@ HTML_INTERFAZ = """
             const fila = document.getElementById(`fila-${itemId}`);
             if (fila) fila.remove();
 
-            // Actualiza contador numerico sin disparar el mensaje de finalizacion prematuro
             const itemsTotales = document.querySelectorAll('#listaResultados li').length;
             const itemsExitosos = document.querySelectorAll('#listaResultados li.resultado-completado').length;
             const contadorProgreso = document.getElementById('contadorProgreso');
             contadorProgreso.textContent = `${itemsExitosos}/${itemsTotales}`;
 
-            // Si al cancelar ya no quedan elementos en cola, se concluye formalmente el proceso
             if (colaDescargas.length === 0 && !procesandoDescarga) {
                 detenerAvanceBarra(100, true);
                 actualizarResumenContadoresFinal();
@@ -396,6 +455,7 @@ HTML_INTERFAZ = """
             colaDescargas = [];
             itemsCanceladosSet.clear();
             archivosSeleccionados = [];
+            actualizarIndicadorArchivos();
             renderizarChipsArchivos();
             procesandoDescarga = false;
             tareaActivaActual = null;
@@ -589,15 +649,16 @@ HTML_INTERFAZ = """
             const divAcciones = document.getElementById(`item-acciones-${itemId}`);
             const textoEstado = document.getElementById('textoEstado');
 
+            // COLOR AZUL DISTINTIVO (#38bdf8) CUANDO SE ENCUENTRA DESCARGANDO ACTIVAMENTE
             if (esExtra) {
                 const numeroActual = procesadasVersiones + 1;
                 actualizarProgresoVisual(numeroActual, totalEncoladasVersiones);
                 textoEstado.textContent = `🔍 ${nombreDisplay}...`;
-                if (spanTexto) spanTexto.innerHTML = `<span class="text-warning">⏳ Descargando: "${escaparHtml(nombreDisplay)}"...</span>`;
+                if (spanTexto) spanTexto.innerHTML = `<span class="texto-descargando-activo">⚡ Descargando: "${escaparHtml(nombreDisplay)}"...</span>`;
             } else {
                 actualizarProgresoVisual(ordenCancion, listaCancionesGlobal.length);
                 textoEstado.textContent = `🔍 ${cancion}...`;
-                if (spanTexto) spanTexto.innerHTML = `<span class="text-warning">⏳ Descargando: "${escaparHtml(cancion)}"...</span>`;
+                if (spanTexto) spanTexto.innerHTML = `<span class="texto-descargando-activo">⚡ Descargando: "${escaparHtml(cancion)}"...</span>`;
             }
 
             iniciarAvanceBarra(20, 90);
@@ -663,7 +724,6 @@ HTML_INTERFAZ = """
                             spanTexto.innerHTML = `${iconoPrefijo} ${escaparHtml(guardadoComo)}`;
                         }
 
-                        // 2. Solo las canciones base conservan la opcion de otra version
                         if (divAcciones) {
                             if (!esExtra) {
                                 divAcciones.innerHTML = `
@@ -775,7 +835,7 @@ HTML_INTERFAZ = """
                 listaCancionesGlobal.forEach((cancion, idx) => {
                     listaResultados.insertAdjacentHTML('beforeend', `
                         <li class="list-group-item bg-transparent text-secondary border-secondary d-flex justify-content-between align-items-center" id="fila-${idx}">
-                            <span id="item-texto-${idx}" class="me-2">⏳ En cola: ${escaparHtml(cancion)}</span>
+                            <span id="item-texto-${idx}" class="me-2 text-secondary">⏳ En cola: ${escaparHtml(cancion)}</span>
                             <div id="item-acciones-${idx}" class="d-flex align-items-center gap-2">
                                 <button type="button" class="btn-cancelar-cancion" title="Cancelar esta canción" onclick="cancelarOEliminarCancionEnCola('${idx}')">
                                     ✖
