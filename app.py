@@ -50,55 +50,60 @@ HTML_INTERFAZ = """
                 <div class="text-center mb-4">
                     <h2 class="fw-bold">🎵 Spotify Matcher <span class="badge bg-success">Web Edition</span></h2>
                     <!-- SECCIÓN FORMULARIO DE ENTRADA -->
-    <div class="card-container" style="max-width: 650px; margin: 0 auto; padding: 20px;">
-        
-        <p style="text-align: center; margin-bottom: 25px; font-size: 1.05rem; color: #b3b3b3;">
+   <!-- SUBTÍTULO -->
+        <p style="text-align: center; color: #b3b3b3; margin-top: 8px; margin-bottom: 25px; font-size: 0.95rem;">
             Elige tus canciones preferidas y en un momento todas serán tuyas
         </p>
 
-        <!-- 1. Cargar Archivo -->
-        <div style="margin-bottom: 20px;">
-            <label for="archivo" style="display: block; margin-bottom: 8px; font-weight: bold;">
+        <!-- TARJETA CONTENEDORA PRINCIPAL -->
+        <div style="background-color: #181818; border: 1px solid #282828; border-radius: 8px; padding: 24px; max-width: 680px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+            
+            <!-- 1. Sube tu archivo -->
+            <label for="archivo" style="display: block; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: #ffffff;">
                 1. Sube tu lista de canciones (Bloc de notas, Word, Excel, Pdf, Etc...)
             </label>
-            <input type="file" id="archivo" name="archivo" class="form-control" style="width: 100%;" />
-        </div>
+            <input type="file" id="archivo" name="archivo" style="width: 100%; box-sizing: border-box; background-color: #282828; color: #b3b3b3; border: 1px solid #3e3e3e; border-radius: 4px; padding: 8px 12px; margin-bottom: 16px; font-size: 0.9rem;" />
 
-        <!-- Separador Destacado -->
-        <div style="text-align: center; margin: 25px 0;">
-            <span style="background-color: #1DB954; color: #ffffff; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; padding: 6px 16px; border-radius: 20px; display: inline-block; box-shadow: 0 2px 8px rgba(29, 185, 84, 0.3);">
-                — O TAMBIÉN PUEDES —
-            </span>
-        </div>
+            <!-- Separador Estilo Badge -->
+            <div style="text-align: center; margin: 18px 0;">
+                <span style="background-color: #1ed760; color: #ffffff; font-family: inherit; font-weight: 700; font-size: 0.85rem; padding: 4px 14px; border-radius: 6px; display: inline-block;">
+                    — O TAMBIÉN PUEDES —
+                </span>
+            </div>
 
-        <!-- 2. Escribir canciones directamente -->
-        <div style="margin-bottom: 25px;">
-            <label for="lista_canciones" style="display: block; margin-bottom: 8px; font-weight: bold;">
+            <!-- 2. Escribir canciones directamente -->
+            <label for="lista_canciones" style="display: block; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: #ffffff;">
                 2. Escribir las canciones directamente (una por línea o separadas por coma)
             </label>
             <textarea 
                 id="lista_canciones" 
                 name="lista_canciones" 
                 rows="4" 
-                class="form-control" 
-                style="width: 100%; resize: vertical;"
+                style="width: 100%; box-sizing: border-box; background-color: #282828; color: #ffffff; border: 1px solid #3e3e3e; border-radius: 4px; padding: 10px; font-family: inherit; font-size: 0.95rem; resize: vertical; margin-bottom: 20px;"
                 placeholder="Ej: Canción 1, Canción 2, Canción 3 ... ó&#10;Canción 1&#10;Canción 2"
             ></textarea>
+
+            <!-- Botón Elegir Carpeta y Descargar -->
+            <button 
+                type="button" 
+                id="btnDescargar" 
+                onclick="iniciarProceso()" 
+                style="width: 100%; box-sizing: border-box; background-color: #1ed760; color: #ffffff; font-family: inherit; font-weight: 700; font-size: 1.05rem; padding: 12px; border: none; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px; transition: background 0.2s;"
+            >
+                <span>📁</span> Elige Donde Guardarlas y Listo !!!
+            </button>
+
+            <!-- Botón Limpiar Todo -->
+            <button 
+                type="button" 
+                id="btnLimpiar" 
+                onclick="limpiarTodo()" 
+                style="width: 100%; box-sizing: border-box; background-color: #ffffff; color: #000000; font-family: inherit; font-weight: 700; font-size: 0.95rem; padding: 10px; border: none; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.2s;"
+            >
+                <span>🧹</span> Limpiar Todo
+            </button>
+
         </div>
-
-        <!-- 3. Botón de Acción Principal -->
-        <button 
-            type="button" 
-            id="btnDescargar" 
-            onclick="iniciarProceso()" 
-            class="btn-primary" 
-            style="width: 100%; padding: 14px; font-size: 1.05rem; font-weight: bold; background-color: #1DB954; color: #ffffff; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;"
-        >
-            <span>📁</span> Elige Donde Guardarlas y Listo !!!
-        </button>
-
-    </div>
-                        </div>
                     </form>
 
                     <div id="panelProgreso" class="mt-4">
