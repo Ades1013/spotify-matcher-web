@@ -98,14 +98,15 @@ HTML_INTERFAZ = """
                 <div class="text-center mb-4">
                     <h2 class="fw-bold">🎵 Spotify Matcher <span class="badge bg-success">Web Edition</span></h2>
                     
+                    <!-- 4. Subtitulo Actualizado -->
                     <p style="text-align: center; color: #b3b3b3; margin-top: 8px; margin-bottom: 25px; font-size: 0.95rem;">
-                        Elige tus canciones preferidas y en un momento todas serán tuyas
+                        Elige tus canciones preferidas y luego a disfrutarlas.
                     </p>
 
                     <form id="formDescarga">
                         <div style="background-color: #181818; border: 1px solid #282828; border-radius: 8px; padding: 24px; max-width: 680px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
                             
-                            <!-- 1. Sube tu lista de canciones (Texto actualizado sin Etc...) -->
+                            <!-- 1. Sube tu lista de canciones -->
                             <label class="text-start d-block" style="font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: #ffffff;">
                                 1. Sube tu lista de canciones (Bloc de notas, Word, Excel, Pdf)
                             </label>
@@ -117,19 +118,19 @@ HTML_INTERFAZ = """
                                 style="width: 100%; box-sizing: border-box; background-color: #282828; color: #b3b3b3; border: 1px solid #3e3e3e; border-radius: 4px; padding: 8px 12px; margin-bottom: 8px; font-size: 0.9rem;" 
                             />
                             
-                            <!-- Lista visual de archivos cargados -->
+                            <!-- Chips acumulativos de archivos -->
                             <div id="contenedorChipsArchivos" class="d-flex flex-wrap gap-2 mb-3"></div>
 
-                            <!-- Separador Estilo Badge -->
+                            <!-- 5. Separador Estilo Badge Actualizado -->
                             <div style="text-align: center; margin: 18px 0;">
                                 <span class="badge bg-success" style="font-weight: 700; font-size: 0.85rem; padding: 6px 16px; border-radius: 6px;">
-                                    — O TAMBIÉN PUEDES —
+                                    \\ O TAMBIÉN PUEDES /
                                 </span>
                             </div>
 
-                            <!-- 2. Escribir canciones directamente -->
+                            <!-- 3. Escribir canciones directamente (Orden invertido) -->
                             <label for="texto_canciones" class="text-start d-block" style="font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: #ffffff;">
-                                2. Escribir las canciones directamente (una por línea o separadas por coma)
+                                2. Escribir las canciones directamente (Separadas por coma o una en cada línea)
                             </label>
                             <textarea 
                                 id="texto_canciones" 
@@ -139,7 +140,7 @@ HTML_INTERFAZ = """
                                 placeholder="Ej: Canción 1, Canción 2, Canción 3 ... ó&#10;Canción 1&#10;Canción 2"
                             ></textarea>
 
-                            <!-- Botón Principal con texto ajustado a 'Guardar' -->
+                            <!-- Botón Principal -->
                             <button 
                                 type="submit" 
                                 id="btnDescargar" 
@@ -270,7 +271,7 @@ HTML_INTERFAZ = """
             txt.textContent = `▶ ${titulo}`;
             audioPlayer.src = urlAudio;
             contenedor.style.display = 'block';
-            audioPlayer.play().catch(e => console.log('Reproducción asistida iniciada'));
+            audioPlayer.play().catch(e => console.log('Reproducción iniciada'));
         }
 
         function cerrarReproductor() {
@@ -284,7 +285,7 @@ HTML_INTERFAZ = """
         function cancelarOEliminarCancionEnCola(itemId) {
             itemsCanceladosSet.add(String(itemId));
 
-            // Caso 1: La cancion se esta descargando actualmente
+            // Caso 1: La cancion se esta descargando en este instante
             if (tareaActivaActual && String(tareaActivaActual.itemId) === String(itemId)) {
                 if (abortControllerActual) {
                     abortControllerActual.abort();
@@ -302,7 +303,19 @@ HTML_INTERFAZ = """
             const fila = document.getElementById(`fila-${itemId}`);
             if (fila) fila.remove();
 
-            actualizarResumenContadoresFinal();
+            // Actualiza contador numerico sin disparar el mensaje de finalizacion prematuro
+            const itemsTotales = document.querySelectorAll('#listaResultados li').length;
+            const itemsExitosos = document.querySelectorAll('#listaResultados li.resultado-completado').length;
+            const contadorProgreso = document.getElementById('contadorProgreso');
+            contadorProgreso.textContent = `${itemsExitosos}/${itemsTotales}`;
+
+            // Si al cancelar ya no quedan elementos en cola, se concluye formalmente el proceso
+            if (colaDescargas.length === 0 && !procesandoDescarga) {
+                detenerAvanceBarra(100, true);
+                actualizarResumenContadoresFinal();
+                document.getElementById('textoEstado').textContent = "¡Proceso completado!";
+                document.getElementById('btnDescargar').disabled = false;
+            }
         }
 
         function actualizarProgresoVisual(posicionActual, totalElementos) {
@@ -563,7 +576,6 @@ HTML_INTERFAZ = """
             tareaActivaActual = tarea;
             const { cancion, urlVideo, itemId, nombreDisplay, esExtra, ordenCancion } = tarea;
 
-            // Si el usuario canceló este item antes de iniciar la petición
             if (itemsCanceladosSet.has(String(itemId))) {
                 const fila = document.getElementById(`fila-${itemId}`);
                 if (fila) fila.remove();
@@ -603,7 +615,6 @@ HTML_INTERFAZ = """
                     signal: abortControllerActual.signal
                 });
 
-                // Si fue cancelada mientras descargaba en el servidor, se descarta el archivo recibido
                 if (itemsCanceladosSet.has(String(itemId))) {
                     const fila = document.getElementById(`fila-${itemId}`);
                     if (fila) fila.remove();
@@ -652,13 +663,17 @@ HTML_INTERFAZ = """
                             spanTexto.innerHTML = `${iconoPrefijo} ${escaparHtml(guardadoComo)}`;
                         }
 
-                        // LA X DESAPARECE AUTOMÁTICAMENTE AL TERMINAR
+                        // 2. Solo las canciones base conservan la opcion de otra version
                         if (divAcciones) {
-                            divAcciones.innerHTML = `
-                                <button type="button" class="btn btn-sm btn-outline-light flex-shrink-0 btn-otra-version" onclick="abrirSelectorVersiones('${escaparHtml(cancion)}')">
-                                    🔄 Otra versión
-                                </button>
-                            `;
+                            if (!esExtra) {
+                                divAcciones.innerHTML = `
+                                    <button type="button" class="btn btn-sm btn-outline-light flex-shrink-0 btn-otra-version" onclick="abrirSelectorVersiones('${escaparHtml(cancion)}')">
+                                        🔄 Otra versión
+                                    </button>
+                                `;
+                            } else {
+                                divAcciones.innerHTML = '';
+                            }
                         }
                     }
                 } else {
