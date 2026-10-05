@@ -41,6 +41,8 @@ HTML_INTERFAZ = """
         #panelProgreso, #exito { display: none; }
         #barraProgreso { transition: width 0.25s ease; }
         .btn-otra-version { transition: all 0.2s ease; }
+        .enlace-audio { color: #198754; text-decoration: underline; cursor: pointer; font-weight: 600; }
+        .enlace-audio:hover { color: #20c997; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -49,61 +51,66 @@ HTML_INTERFAZ = """
             <div class="col-md-7">
                 <div class="text-center mb-4">
                     <h2 class="fw-bold">🎵 Spotify Matcher <span class="badge bg-success">Web Edition</span></h2>
-                    <!-- SECCIÓN FORMULARIO DE ENTRADA -->
-   <!-- SUBTÍTULO -->
-        <p style="text-align: center; color: #b3b3b3; margin-top: 8px; margin-bottom: 25px; font-size: 0.95rem;">
-            Elige tus canciones preferidas y en un momento todas serán tuyas
-        </p>
+                    
+                    <p style="text-align: center; color: #b3b3b3; margin-top: 8px; margin-bottom: 25px; font-size: 0.95rem;">
+                        Elige tus canciones preferidas y en un momento todas serán tuyas
+                    </p>
 
-        <!-- TARJETA CONTENEDORA PRINCIPAL -->
-        <div style="background-color: #181818; border: 1px solid #282828; border-radius: 8px; padding: 24px; max-width: 680px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
-            
-            <!-- 1. Sube tu archivo -->
-            <label for="archivo" style="display: block; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: #ffffff;">
-                1. Sube tu lista de canciones (Bloc de notas, Word, Excel, Pdf, Etc...)
-            </label>
-            <input type="file" id="archivo" name="archivo" style="width: 100%; box-sizing: border-box; background-color: #282828; color: #b3b3b3; border: 1px solid #3e3e3e; border-radius: 4px; padding: 8px 12px; margin-bottom: 16px; font-size: 0.9rem;" />
+                    <form id="formDescarga">
+                        <div style="background-color: #181818; border: 1px solid #282828; border-radius: 8px; padding: 24px; max-width: 680px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                            
+                            <!-- 1. Sube tu archivo con botón X para eliminar -->
+                            <label for="archivo_lista" class="text-start d-block" style="font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: #ffffff;">
+                                1. Sube tu lista de canciones (Bloc de notas, Word, Excel, Pdf, Etc...)
+                            </label>
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                                <input type="file" id="archivo_lista" name="archivo_lista" onchange="actualizarEstadoBotonX()" style="flex: 1; box-sizing: border-box; background-color: #282828; color: #b3b3b3; border: 1px solid #3e3e3e; border-radius: 4px; padding: 8px 12px; font-size: 0.9rem;" />
+                                <button type="button" id="btnQuitarArchivo" onclick="quitarArchivoSeleccionado()" title="Quitar archivo" style="display: none; background-color: #dc3545; color: #ffffff; border: none; border-radius: 4px; padding: 8px 12px; font-weight: bold; cursor: pointer;">
+                                    ✖
+                                </button>
+                            </div>
 
-            <!-- Separador Estilo Badge -->
-            <div style="text-align: center; margin: 18px 0;">
-                <span style="background-color: #1ed760; color: #ffffff; font-family: inherit; font-weight: 700; font-size: 0.85rem; padding: 4px 14px; border-radius: 6px; display: inline-block;">
-                    — O TAMBIÉN PUEDES —
-                </span>
-            </div>
+                            <!-- Separador Estilo Badge Uniforme con Web Edition -->
+                            <div style="text-align: center; margin: 18px 0;">
+                                <span class="badge bg-success" style="font-weight: 700; font-size: 0.85rem; padding: 6px 16px; border-radius: 6px;">
+                                    — O TAMBIÉN PUEDES —
+                                </span>
+                            </div>
 
-            <!-- 2. Escribir canciones directamente -->
-            <label for="lista_canciones" style="display: block; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: #ffffff;">
-                2. Escribir las canciones directamente (una por línea o separadas por coma)
-            </label>
-            <textarea 
-                id="lista_canciones" 
-                name="lista_canciones" 
-                rows="4" 
-                style="width: 100%; box-sizing: border-box; background-color: #282828; color: #ffffff; border: 1px solid #3e3e3e; border-radius: 4px; padding: 10px; font-family: inherit; font-size: 0.95rem; resize: vertical; margin-bottom: 20px;"
-                placeholder="Ej: Canción 1, Canción 2, Canción 3 ... ó&#10;Canción 1&#10;Canción 2"
-            ></textarea>
+                            <!-- 2. Escribir canciones directamente -->
+                            <label for="texto_canciones" class="text-start d-block" style="font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: #ffffff;">
+                                2. Escribir las canciones directamente (una por línea o separadas por coma)
+                            </label>
+                            <textarea 
+                                id="texto_canciones" 
+                                name="texto_canciones" 
+                                rows="4" 
+                                style="width: 100%; box-sizing: border-box; background-color: #282828; color: #ffffff; border: 1px solid #3e3e3e; border-radius: 4px; padding: 10px; font-size: 0.95rem; resize: vertical; margin-bottom: 20px;"
+                                placeholder="Ej: Canción 1, Canción 2, Canción 3 ... ó&#10;Canción 1&#10;Canción 2"
+                            ></textarea>
 
-            <!-- Botón Elegir Carpeta y Descargar -->
-            <button 
-                type="button" 
-                id="btnDescargar" 
-                onclick="iniciarProceso()" 
-                style="width: 100%; box-sizing: border-box; background-color: #1ed760; color: #ffffff; font-family: inherit; font-weight: 700; font-size: 1.05rem; padding: 12px; border: none; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px; transition: background 0.2s;"
-            >
-                <span>📁</span> Elige Donde Guardarlas y Listo !!!
-            </button>
+                            <!-- Botón Elegir Carpeta y Descargar Uniforme -->
+                            <button 
+                                type="submit" 
+                                id="btnDescargar" 
+                                class="btn-verde"
+                                style="width: 100%; box-sizing: border-box; font-size: 1.05rem; padding: 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px;"
+                            >
+                                <span>📁</span> Elige Donde Guardarlas y Listo !!!
+                            </button>
 
-            <!-- Botón Limpiar Todo -->
-            <button 
-                type="button" 
-                id="btnLimpiar" 
-                onclick="limpiarTodo()" 
-                style="width: 100%; box-sizing: border-box; background-color: #ffffff; color: #000000; font-family: inherit; font-weight: 700; font-size: 0.95rem; padding: 10px; border: none; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.2s;"
-            >
-                <span>🧹</span> Limpiar Todo
-            </button>
+                            <!-- Botón Limpiar Todo -->
+                            <button 
+                                type="button" 
+                                id="btnLimpiar" 
+                                onclick="limpiarFormulario()" 
+                                class="btn-blanco"
+                                style="width: 100%; box-sizing: border-box; font-size: 0.95rem; padding: 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;"
+                            >
+                                <span>🧹</span> Limpiar Todo
+                            </button>
 
-        </div>
+                        </div>
                     </form>
 
                     <div id="panelProgreso" class="mt-4">
@@ -162,6 +169,20 @@ HTML_INTERFAZ = """
             return texto.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
 
+        function actualizarEstadoBotonX() {
+            const input = document.getElementById('archivo_lista');
+            const btn = document.getElementById('btnQuitarArchivo');
+            if (input && btn) {
+                btn.style.display = (input.files && input.files.length > 0) ? 'inline-block' : 'none';
+            }
+        }
+
+        function quitarArchivoSeleccionado() {
+            const input = document.getElementById('archivo_lista');
+            if (input) input.value = '';
+            actualizarEstadoBotonX();
+        }
+
         function actualizarProgresoVisual(posicionActual, totalElementos) {
             const contadorProgreso = document.getElementById('contadorProgreso');
             contadorProgreso.textContent = `${posicionActual}/${totalElementos}`;
@@ -183,7 +204,7 @@ HTML_INTERFAZ = """
                     exito.textContent = `★ ¡Listo! Se guardaron ${itemsExitosos} de ${itemsTotales} canciones.`;
                 } else if (itemsExitosos > 0) {
                     exito.className = "alert alert-warning text-center mt-4 fw-bold";
-                    exito.textContent = `⚠️️ Se guardaron ${itemsExitosos} de ${itemsTotales} canciones activas.`;
+                    exito.textContent = `⚠ Se guardaron ${itemsExitosos} de ${itemsTotales} canciones activas.`;
                 } else {
                     exito.className = "alert alert-danger text-center mt-4 fw-bold";
                     exito.textContent = `❌ No se pudo guardar ninguna canción (0 de ${itemsTotales}).`;
@@ -243,6 +264,7 @@ HTML_INTERFAZ = """
             totalEncoladasVersiones = 0;
             procesadasVersiones = 0;
             document.getElementById('formDescarga').reset();
+            quitarArchivoSeleccionado();
             document.getElementById('panelProgreso').style.display = 'none';
             document.getElementById('exito').style.display = 'none';
             document.getElementById('listaResultados').innerHTML = '';
@@ -315,7 +337,6 @@ HTML_INTERFAZ = """
             document.body.appendChild(a);
             a.click();
             a.remove();
-            window.URL.revokeObjectURL(url);
             return nombreArchivo;
         }
 
@@ -442,6 +463,7 @@ HTML_INTERFAZ = """
 
                 if (respAudio.ok) {
                     let guardadoComo = "";
+                    let enlaceAudioUrl = null;
                     const urlUsada = respAudio.headers.get('X-Youtube-Url') || urlVideo;
                     if (urlUsada) registrarUrlDescargada(cancion, urlUsada);
 
@@ -451,6 +473,7 @@ HTML_INTERFAZ = """
                         if (datosPC.url_usada) registrarUrlDescargada(cancion, datosPC.url_usada);
                     } else {
                         const blob = await respAudio.blob();
+                        enlaceAudioUrl = window.URL.createObjectURL(blob);
                         const nombreCabecera = respAudio.headers.get('X-Filename');
                         const nombreArchivo = nombreCabecera ? decodeURIComponent(nombreCabecera) : `${cancion}.m4a`;
                         guardadoComo = await guardarBlobEnDispositivo(blob, nombreArchivo);
@@ -465,7 +488,11 @@ HTML_INTERFAZ = """
                         if (liPadre) {
                             liPadre.className = "list-group-item bg-transparent text-success border-secondary d-flex justify-content-between align-items-center";
                         }
-                        spanTexto.innerHTML = `✅ ${guardadoComo}`;
+                        if (enlaceAudioUrl) {
+                            spanTexto.innerHTML = `✅ <a href="${enlaceAudioUrl}" target="_blank" download="${escaparHtml(guardadoComo)}" class="enlace-audio" title="Clic para reproducir o abrir archivo">${escaparHtml(guardadoComo)}</a>`;
+                        } else {
+                            spanTexto.innerHTML = `✅ ${escaparHtml(guardadoComo)}`;
+                        }
                     }
                 } else {
                     if (spanTexto) {
@@ -497,10 +524,11 @@ HTML_INTERFAZ = """
                 if (!confirm("Hay descargas en progreso o en cola. ¿Deseas reiniciar la lista?")) return;
             }
 
-            const archivo = document.getElementById('archivo_lista').files.length;
+            const inputArchivo = document.getElementById('archivo_lista');
+            const archivoCargado = inputArchivo && inputArchivo.files && inputArchivo.files.length > 0;
             const texto = document.getElementById('texto_canciones').value.trim();
-            if (!archivo && !texto) {
-                alert("Por favor sube un archivo (.txt / .csv) o ingresa canciones en el campo de texto.");
+            if (!archivoCargado && !texto) {
+                alert("Por favor sube un archivo o ingresa canciones en el campo de texto.");
                 return;
             }
 
