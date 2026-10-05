@@ -41,8 +41,26 @@ HTML_INTERFAZ = """
         #panelProgreso, #exito { display: none; }
         #barraProgreso { transition: width 0.25s ease; }
         .btn-otra-version { transition: all 0.2s ease; }
-        .enlace-audio { color: #198754; text-decoration: underline; cursor: pointer; font-weight: 600; }
-        .enlace-audio:hover { color: #20c997; text-decoration: underline; }
+        .enlace-audio-verde { color: #198754; text-decoration: underline; cursor: pointer; font-weight: 600; }
+        .enlace-audio-verde:hover { color: #20c997; }
+        .enlace-audio-naranja { color: #ffc107; text-decoration: underline; cursor: pointer; font-weight: 600; }
+        .enlace-audio-naranja:hover { color: #ffca2c; }
+        .btn-eliminar-item {
+            background-color: transparent;
+            color: #ffffff;
+            border: 1px solid #555555;
+            border-radius: 4px;
+            padding: 2px 7px;
+            font-size: 0.85rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-eliminar-item:hover {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -59,18 +77,19 @@ HTML_INTERFAZ = """
                     <form id="formDescarga">
                         <div style="background-color: #181818; border: 1px solid #282828; border-radius: 8px; padding: 24px; max-width: 680px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
                             
-                            <!-- 1. Sube tu archivo con botón X para eliminar -->
+                            <!-- 1. Sube tu archivo (soporta seleccion multiple) -->
                             <label for="archivo_lista" class="text-start d-block" style="font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: #ffffff;">
                                 1. Sube tu lista de canciones (Bloc de notas, Word, Excel, Pdf, Etc...)
                             </label>
-                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
-                                <input type="file" id="archivo_lista" name="archivo_lista" onchange="actualizarEstadoBotonX()" style="flex: 1; box-sizing: border-box; background-color: #282828; color: #b3b3b3; border: 1px solid #3e3e3e; border-radius: 4px; padding: 8px 12px; font-size: 0.9rem;" />
-                                <button type="button" id="btnQuitarArchivo" onclick="quitarArchivoSeleccionado()" title="Quitar archivo" style="display: none; background-color: #dc3545; color: #ffffff; border: none; border-radius: 4px; padding: 8px 12px; font-weight: bold; cursor: pointer;">
-                                    ✖
-                                </button>
-                            </div>
+                            <input 
+                                type="file" 
+                                id="archivo_lista" 
+                                name="archivo_lista" 
+                                multiple 
+                                style="width: 100%; box-sizing: border-box; background-color: #282828; color: #b3b3b3; border: 1px solid #3e3e3e; border-radius: 4px; padding: 8px 12px; margin-bottom: 16px; font-size: 0.9rem;" 
+                            />
 
-                            <!-- Separador Estilo Badge Uniforme con Web Edition -->
+                            <!-- Separador Estilo Badge -->
                             <div style="text-align: center; margin: 18px 0;">
                                 <span class="badge bg-success" style="font-weight: 700; font-size: 0.85rem; padding: 6px 16px; border-radius: 6px;">
                                     — O TAMBIÉN PUEDES —
@@ -89,7 +108,7 @@ HTML_INTERFAZ = """
                                 placeholder="Ej: Canción 1, Canción 2, Canción 3 ... ó&#10;Canción 1&#10;Canción 2"
                             ></textarea>
 
-                            <!-- Botón Elegir Carpeta y Descargar Uniforme -->
+                            <!-- Botón Principal -->
                             <button 
                                 type="submit" 
                                 id="btnDescargar" 
@@ -112,6 +131,15 @@ HTML_INTERFAZ = """
 
                         </div>
                     </form>
+
+                    <!-- Barra reproductora rapida -->
+                    <div id="contenedorReproductor" class="mt-3 p-2 bg-dark border border-secondary rounded" style="display: none;">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span id="reproductorTitulo" class="small text-truncate me-2 fw-semibold text-light"></span>
+                            <button type="button" class="btn btn-sm btn-outline-secondary py-0" onclick="cerrarReproductor()">✖</button>
+                        </div>
+                        <audio id="audioPlayerGlobal" controls style="width: 100%; height: 35px;"></audio>
+                    </div>
 
                     <div id="panelProgreso" class="mt-4">
                         <div class="d-flex justify-content-between mb-1">
@@ -169,18 +197,39 @@ HTML_INTERFAZ = """
             return texto.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
 
-        function actualizarEstadoBotonX() {
-            const input = document.getElementById('archivo_lista');
-            const btn = document.getElementById('btnQuitarArchivo');
-            if (input && btn) {
-                btn.style.display = (input.files && input.files.length > 0) ? 'inline-block' : 'none';
-            }
+        function reproducirEnNavegador(urlAudio, titulo) {
+            const contenedor = document.getElementById('contenedorReproductor');
+            const audioPlayer = document.getElementById('audioPlayerGlobal');
+            const txt = document.getElementById('reproductorTitulo');
+
+            txt.textContent = `▶ ${titulo}`;
+            audioPlayer.src = urlAudio;
+            contenedor.style.display = 'block';
+            audioPlayer.play().catch(e => console.log('Reproducción asistida iniciada'));
         }
 
-        function quitarArchivoSeleccionado() {
-            const input = document.getElementById('archivo_lista');
-            if (input) input.value = '';
-            actualizarEstadoBotonX();
+        function cerrarReproductor() {
+            const contenedor = document.getElementById('contenedorReproductor');
+            const audioPlayer = document.getElementById('audioPlayerGlobal');
+            audioPlayer.pause();
+            audioPlayer.src = '';
+            contenedor.style.display = 'none';
+        }
+
+        async function eliminarArchivoDescargado(itemId, nombreArchivo) {
+            if (!confirm(`¿Deseas quitar "${nombreArchivo}" de la lista y del disco?`)) return;
+
+            if (dirHandleNube && ('removeEntry' in dirHandleNube)) {
+                try {
+                    await dirHandleNube.removeEntry(nombreArchivo);
+                } catch (e) {
+                    console.warn("No se pudo remover físicamente del disco:", e);
+                }
+            }
+
+            const fila = document.getElementById(`fila-${itemId}`);
+            if (fila) fila.remove();
+            actualizarResumenContadoresFinal();
         }
 
         function actualizarProgresoVisual(posicionActual, totalElementos) {
@@ -193,7 +242,7 @@ HTML_INTERFAZ = """
             const exito = document.getElementById('exito');
 
             const itemsTotales = document.querySelectorAll('#listaResultados li').length;
-            const itemsExitosos = document.querySelectorAll('#listaResultados li.text-success').length;
+            const itemsExitosos = document.querySelectorAll('#listaResultados li.resultado-completado').length;
 
             if (itemsTotales > 0) {
                 contadorProgreso.textContent = `${itemsExitosos}/${itemsTotales}`;
@@ -254,6 +303,7 @@ HTML_INTERFAZ = """
             if (procesandoDescarga || colaDescargas.length > 0) {
                 if (!confirm("Hay canciones en proceso o en cola. ¿Deseas limpiar todo?")) return;
             }
+            cerrarReproductor();
             detenerAvanceBarra(0, true);
             urlsDescargadasPorCancion = {};
             listaCancionesGlobal = [];
@@ -264,7 +314,6 @@ HTML_INTERFAZ = """
             totalEncoladasVersiones = 0;
             procesadasVersiones = 0;
             document.getElementById('formDescarga').reset();
-            quitarArchivoSeleccionado();
             document.getElementById('panelProgreso').style.display = 'none';
             document.getElementById('exito').style.display = 'none';
             document.getElementById('listaResultados').innerHTML = '';
@@ -367,9 +416,9 @@ HTML_INTERFAZ = """
                     btn.className = 'list-group-item list-group-item-action bg-dark text-light border-secondary d-flex justify-content-between align-items-center';
                     btn.innerHTML = `
                         <div class="me-2 text-start">
-                            <span class="badge bg-success me-1">Opción ${v.version}</span>
+                            <span class="badge bg-warning text-dark me-1">Opción ${v.version}</span>
                             <strong>${v.titulo}</strong><br>
-                            <small class="text-secondary">📺 ${v.canal} | ⏱️ ${v.duracion} | 👁️ ${v.vistas}</small>
+                            <small class="text-secondary">📺 ${v.canal} | ⏱️️ ${v.duracion} | 👁️ ${v.vistas}</small>
                         </div>
                         <span class="btn btn-sm btn-blanco">Descargar</span>
                     `;
@@ -397,6 +446,7 @@ HTML_INTERFAZ = """
             listaResultados.insertAdjacentHTML('beforeend', `
                 <li class="list-group-item bg-transparent text-secondary border-secondary d-flex justify-content-between align-items-center" id="fila-${nuevoId}">
                     <span id="item-texto-${nuevoId}" class="me-2 text-warning">⏳ En cola: ${escaparHtml(tituloVideo || cancion)}</span>
+                    <div id="item-acciones-${nuevoId}" class="d-flex align-items-center gap-2"></div>
                 </li>
             `);
 
@@ -435,6 +485,7 @@ HTML_INTERFAZ = """
             tareaActivaActual = tarea;
             const { cancion, urlVideo, itemId, nombreDisplay, esExtra, ordenCancion } = tarea;
             const spanTexto = document.getElementById(`item-texto-${itemId}`);
+            const divAcciones = document.getElementById(`item-acciones-${itemId}`);
             const textoEstado = document.getElementById('textoEstado');
 
             if (esExtra) {
@@ -463,7 +514,7 @@ HTML_INTERFAZ = """
 
                 if (respAudio.ok) {
                     let guardadoComo = "";
-                    let enlaceAudioUrl = null;
+                    let urlReproduccion = null;
                     const urlUsada = respAudio.headers.get('X-Youtube-Url') || urlVideo;
                     if (urlUsada) registrarUrlDescargada(cancion, urlUsada);
 
@@ -473,7 +524,7 @@ HTML_INTERFAZ = """
                         if (datosPC.url_usada) registrarUrlDescargada(cancion, datosPC.url_usada);
                     } else {
                         const blob = await respAudio.blob();
-                        enlaceAudioUrl = window.URL.createObjectURL(blob);
+                        urlReproduccion = window.URL.createObjectURL(blob);
                         const nombreCabecera = respAudio.headers.get('X-Filename');
                         const nombreArchivo = nombreCabecera ? decodeURIComponent(nombreCabecera) : `${cancion}.m4a`;
                         guardadoComo = await guardarBlobEnDispositivo(blob, nombreArchivo);
@@ -486,12 +537,29 @@ HTML_INTERFAZ = """
                     if (spanTexto) {
                         const liPadre = spanTexto.closest('li');
                         if (liPadre) {
-                            liPadre.className = "list-group-item bg-transparent text-success border-secondary d-flex justify-content-between align-items-center";
+                            liPadre.classList.add('resultado-completado');
+                            if (esExtra) {
+                                liPadre.className = "list-group-item bg-transparent text-warning border-secondary d-flex justify-content-between align-items-center resultado-completado";
+                            } else {
+                                liPadre.className = "list-group-item bg-transparent text-success border-secondary d-flex justify-content-between align-items-center resultado-completado";
+                            }
                         }
-                        if (enlaceAudioUrl) {
-                            spanTexto.innerHTML = `✅ <a href="${enlaceAudioUrl}" target="_blank" download="${escaparHtml(guardadoComo)}" class="enlace-audio" title="Clic para reproducir o abrir archivo">${escaparHtml(guardadoComo)}</a>`;
+
+                        const claseColor = esExtra ? 'enlace-audio-naranja' : 'enlace-audio-verde';
+                        const iconoPrefijo = esExtra ? '🔄' : '✅';
+
+                        if (urlReproduccion) {
+                            spanTexto.innerHTML = `${iconoPrefijo} <span class="${claseColor}" onclick="reproducirEnNavegador('${urlReproduccion}', '${escaparHtml(guardadoComo)}')">${escaparHtml(guardadoComo)}</span>`;
                         } else {
-                            spanTexto.innerHTML = `✅ ${escaparHtml(guardadoComo)}`;
+                            spanTexto.innerHTML = `${iconoPrefijo} ${escaparHtml(guardadoComo)}`;
+                        }
+
+                        if (divAcciones) {
+                            divAcciones.insertAdjacentHTML('beforeend', `
+                                <button type="button" class="btn-eliminar-item" title="Eliminar archivo" onclick="eliminarArchivoDescargado('${itemId}', '${escaparHtml(guardadoComo)}')">
+                                    ✖
+                                </button>
+                            `);
                         }
                     }
                 } else {
@@ -584,9 +652,11 @@ HTML_INTERFAZ = """
                     listaResultados.insertAdjacentHTML('beforeend', `
                         <li class="list-group-item bg-transparent text-secondary border-secondary d-flex justify-content-between align-items-center" id="fila-${idx}">
                             <span id="item-texto-${idx}" class="me-2">⏳ En cola: ${escaparHtml(cancion)}</span>
-                            <button type="button" class="btn btn-sm btn-outline-light flex-shrink-0 btn-otra-version" onclick="abrirSelectorVersiones('${escaparHtml(cancion)}')">
-                                🔄 Otra versión
-                            </button>
+                            <div id="item-acciones-${idx}" class="d-flex align-items-center gap-2">
+                                <button type="button" class="btn btn-sm btn-outline-light flex-shrink-0 btn-otra-version" onclick="abrirSelectorVersiones('${escaparHtml(cancion)}')">
+                                    🔄 Otra versión
+                                </button>
+                            </div>
                         </li>
                     `);
                     colaDescargas.push({
@@ -1030,31 +1100,36 @@ def obtener_lista():
         for linea in texto_directo.splitlines():
             canciones.extend([c.strip() for c in linea.split(",") if c.strip()])
 
-    archivo = request.files.get("archivo_lista")
-    if archivo and archivo.filename != "":
-        ext = os.path.splitext(archivo.filename)[1].lower()
-        contenido_raw = archivo.read().decode("utf-8-sig", errors="ignore")
+    archivos = request.files.getlist("archivo_lista")
+    for archivo in archivos:
+        if archivo and archivo.filename != "":
+            ext = os.path.splitext(archivo.filename)[1].lower()
+            contenido_raw = archivo.read().decode("utf-8-sig", errors="ignore")
 
-        if ext == ".csv":
-            lector = csv.reader(io.StringIO(contenido_raw), quotechar='"')
-            encabezados = next(lector, [])
-            try:
-                idx_track = encabezados.index("Track Name")
-                idx_artist = encabezados.index("Artist Name(s)")
-                for fila in lector:
-                    if len(fila) > max(idx_track, idx_artist):
-                        track = fila[idx_track].strip()
-                        artist = fila[idx_artist].strip()
-                        if track and artist:
-                            canciones.append(f"{artist} - {track}")
-            except ValueError:
-                for fila in lector:
-                    if fila and fila[0].strip():
-                        canciones.append(fila[0].strip())
-        else:
-            canciones.extend(
-                [linea.strip() for linea in contenido_raw.splitlines() if linea.strip()]
-            )
+            if ext == ".csv":
+                lector = csv.reader(io.StringIO(contenido_raw), quotechar='"')
+                encabezados = next(lector, [])
+                try:
+                    idx_track = encabezados.index("Track Name")
+                    idx_artist = encabezados.index("Artist Name(s)")
+                    for fila in lector:
+                        if len(fila) > max(idx_track, idx_artist):
+                            track = fila[idx_track].strip()
+                            artist = fila[idx_artist].strip()
+                            if track and artist:
+                                canciones.append(f"{artist} - {track}")
+                except ValueError:
+                    for fila in lector:
+                        if fila and fila[0].strip():
+                            canciones.append(fila[0].strip())
+            else:
+                canciones.extend(
+                    [
+                        linea.strip()
+                        for linea in contenido_raw.splitlines()
+                        if linea.strip()
+                    ]
+                )
 
     if not canciones:
         return jsonify(
