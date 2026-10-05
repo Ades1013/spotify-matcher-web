@@ -105,9 +105,9 @@ HTML_INTERFAZ = """
                     <form id="formDescarga">
                         <div style="background-color: #181818; border: 1px solid #282828; border-radius: 8px; padding: 24px; max-width: 680px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
                             
-                            <!-- 1. Sube tu lista de canciones acumulativa -->
+                            <!-- 1. Sube tu lista de canciones (Texto actualizado sin Etc...) -->
                             <label class="text-start d-block" style="font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: #ffffff;">
-                                1. Sube tu lista de canciones (Bloc de notas, Word, Excel, Pdf, Etc...)
+                                1. Sube tu lista de canciones (Bloc de notas, Word, Excel, Pdf)
                             </label>
                             <input 
                                 type="file" 
@@ -139,14 +139,14 @@ HTML_INTERFAZ = """
                                 placeholder="Ej: Canción 1, Canción 2, Canción 3 ... ó&#10;Canción 1&#10;Canción 2"
                             ></textarea>
 
-                            <!-- Botón Principal -->
+                            <!-- Botón Principal con texto ajustado a 'Guardar' -->
                             <button 
                                 type="submit" 
                                 id="btnDescargar" 
                                 class="btn-verde"
                                 style="width: 100%; box-sizing: border-box; font-size: 1.05rem; padding: 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px;"
                             >
-                                <span>📁</span> Elige Donde Guardarlas y Listo !!!
+                                <span>📁</span> Elige Donde Guardar y Listo !!!
                             </button>
 
                             <!-- Botón Limpiar Todo -->
@@ -218,13 +218,13 @@ HTML_INTERFAZ = """
         let procesandoDescarga = false;
         let tareaActivaActual = null;
         let abortControllerActual = null;
+        let itemsCanceladosSet = new Set();
 
         let totalEncoladasVersiones = 0;
         let procesadasVersiones = 0;
         let modoColaVersiones = false;
         let idItemContador = 1000;
 
-        // Lista acumulativa de archivos cargados en memoria
         let archivosSeleccionados = [];
 
         function escaparHtml(texto) {
@@ -282,8 +282,10 @@ HTML_INTERFAZ = """
         }
 
         function cancelarOEliminarCancionEnCola(itemId) {
-            // Caso 1: La cancion se esta descargando en este mismo instante
-            if (tareaActivaActual && tareaActivaActual.itemId === itemId) {
+            itemsCanceladosSet.add(String(itemId));
+
+            // Caso 1: La cancion se esta descargando actualmente
+            if (tareaActivaActual && String(tareaActivaActual.itemId) === String(itemId)) {
                 if (abortControllerActual) {
                     abortControllerActual.abort();
                 }
@@ -292,8 +294,8 @@ HTML_INTERFAZ = """
                 return;
             }
 
-            // Caso 2: La cancion aun esta esperando en la cola
-            const indice = colaDescargas.findIndex(t => t.itemId === itemId);
+            // Caso 2: La cancion esta en cola de espera
+            const indice = colaDescargas.findIndex(t => String(t.itemId) === String(itemId));
             if (indice !== -1) {
                 colaDescargas.splice(indice, 1);
             }
@@ -379,6 +381,7 @@ HTML_INTERFAZ = """
             urlsDescargadasPorCancion = {};
             listaCancionesGlobal = [];
             colaDescargas = [];
+            itemsCanceladosSet.clear();
             archivosSeleccionados = [];
             renderizarChipsArchivos();
             procesandoDescarga = false;
@@ -559,6 +562,17 @@ HTML_INTERFAZ = """
             const tarea = colaDescargas.shift();
             tareaActivaActual = tarea;
             const { cancion, urlVideo, itemId, nombreDisplay, esExtra, ordenCancion } = tarea;
+
+            // Si el usuario canceló este item antes de iniciar la petición
+            if (itemsCanceladosSet.has(String(itemId))) {
+                const fila = document.getElementById(`fila-${itemId}`);
+                if (fila) fila.remove();
+                procesandoDescarga = false;
+                tareaActivaActual = null;
+                procesarSiguienteEnCola();
+                return;
+            }
+
             const spanTexto = document.getElementById(`item-texto-${itemId}`);
             const divAcciones = document.getElementById(`item-acciones-${itemId}`);
             const textoEstado = document.getElementById('textoEstado');
@@ -588,6 +602,13 @@ HTML_INTERFAZ = """
                     }),
                     signal: abortControllerActual.signal
                 });
+
+                // Si fue cancelada mientras descargaba en el servidor, se descarta el archivo recibido
+                if (itemsCanceladosSet.has(String(itemId))) {
+                    const fila = document.getElementById(`fila-${itemId}`);
+                    if (fila) fila.remove();
+                    return;
+                }
 
                 if (respAudio.ok) {
                     let guardadoComo = "";
@@ -631,7 +652,7 @@ HTML_INTERFAZ = """
                             spanTexto.innerHTML = `${iconoPrefijo} ${escaparHtml(guardadoComo)}`;
                         }
 
-                        // LA X DESAPARECE AUTOMÁTICAMENTE: Dejamos únicamente el botón "Otra versión"
+                        // LA X DESAPARECE AUTOMÁTICAMENTE AL TERMINAR
                         if (divAcciones) {
                             divAcciones.innerHTML = `
                                 <button type="button" class="btn btn-sm btn-outline-light flex-shrink-0 btn-otra-version" onclick="abrirSelectorVersiones('${escaparHtml(cancion)}')">
@@ -641,7 +662,7 @@ HTML_INTERFAZ = """
                         }
                     }
                 } else {
-                    if (spanTexto) {
+                    if (spanTexto && !itemsCanceladosSet.has(String(itemId))) {
                         const liPadre = spanTexto.closest('li');
                         if (liPadre) {
                             liPadre.className = "list-group-item bg-transparent text-danger border-secondary d-flex justify-content-between align-items-center";
@@ -651,8 +672,10 @@ HTML_INTERFAZ = """
                     }
                 }
             } catch (err) {
-                if (err.name === 'AbortError') {
+                if (err.name === 'AbortError' || itemsCanceladosSet.has(String(itemId))) {
                     console.log(`Descarga cancelada por el usuario: ${cancion}`);
+                    const fila = document.getElementById(`fila-${itemId}`);
+                    if (fila) fila.remove();
                 } else if (spanTexto) {
                     const liPadre = spanTexto.closest('li');
                     if (liPadre) {
@@ -703,6 +726,7 @@ HTML_INTERFAZ = """
             listaResultados.innerHTML = '';
             urlsDescargadasPorCancion = {};
             colaDescargas = [];
+            itemsCanceladosSet.clear();
             modoColaVersiones = false;
             totalEncoladasVersiones = 0;
             procesadasVersiones = 0;
